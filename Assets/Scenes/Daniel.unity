@@ -103,9 +103,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xDimension: 10
-  zDimension: 10
+  yDimension: 10
   minDistance: .5
-  planetCount: 30
+  planetCount: 20
   planetPrefab: {fileID: 169134, guid: 26f5502021ada63469b6ea781f0be13a, type: 2}
 --- !u!4 &401436844
 Transform:

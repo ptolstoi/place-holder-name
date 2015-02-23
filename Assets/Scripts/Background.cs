@@ -4,7 +4,7 @@ using System.Collections;
 public class Background : MonoBehaviour {
 
     public float xDimension = 10.0f;
-    public float zDimension = 10.0f;
+    public float yDimension = 10.0f;
     public float minDistance = 2.0f;
     public int planetCount = 10;
     public GameObject planetPrefab;
@@ -20,19 +20,20 @@ public class Background : MonoBehaviour {
         {
             int count = 0;
             Vector2 currPos = CalcPosition();  
+            //calculate new position if the distance to the other planets is too small
             while(!CheckDistance(currPos, i) && count < maxTries)
             {
                 currPos = CalcPosition();
                 count++;
                 if(count == maxTries)
                 {
-                    currPos = new Vector2(-1.0f, -1.0f);
+                    currPos = new Vector2(-10.0f, -10.0f);
                 }
             }
             planetPositions[i] = currPos;
 
             //Instantiate the prefabs
-            Instantiate(planetPrefab, new Vector3(planetPositions[i].x, 0.0f, planetPositions[i].y), Quaternion.identity);
+            Instantiate(planetPrefab, new Vector3(planetPositions[i].x, planetPositions[i].y, 0.0f), Quaternion.identity);
         }
 	}
 
@@ -50,14 +51,9 @@ public class Background : MonoBehaviour {
     private Vector2 CalcPosition()
     {
         float x = Random.Range(0.0f, xDimension);
-        float z = Random.Range(0.0f, zDimension);
+        float y = Random.Range(0.0f, yDimension);
         
-        Vector2 currPos = new Vector2(x, z);
+        Vector2 currPos = new Vector2(x, y);
         return currPos;
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
