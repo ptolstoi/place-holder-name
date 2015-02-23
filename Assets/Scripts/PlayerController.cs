@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class PlayerController : MonoBehaviour
     private KeyCode TheOneButton = KeyCode.Space;
     private Transform[] planets;
 
-    private Transform grapple;
+    private Transform grappleTarget;
     private float distance;
     private bool clockwise;
 
@@ -21,6 +22,7 @@ public class PlayerController : MonoBehaviour
     private bool isInOrbit;
 
     public Vector3 velocity;
+    private LineRenderer lineRenderer;
 
     // Use this for initialization
     void Start()
@@ -37,35 +39,35 @@ public class PlayerController : MonoBehaviour
         {
             planets = GameObject.FindObjectsOfType<Transform>().Where(a => a.name == "Planet").ToArray();
         }
+
+        lineRenderer = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (Input.GetKey(TheOneButton) && grapple == null)
+        if (Input.GetKey(TheOneButton) && grappleTarget == null)
         {
-            var position = transform.position;
             var planet = GetNearestPlanet();
 
             if (planet != null)
             {
-                grapple = planet;
+                grappleTarget = planet;
                 lastDistance = float.MaxValue;
             }
         }
-        else if (Input.GetKeyUp(TheOneButton) && grapple != null)
+        else if (Input.GetKeyUp(TheOneButton) && grappleTarget != null)
         {
             velocity = velocity.magnitude * transform.up;
-            previous = grapple;
-            grapple = null;
+            previous = grappleTarget;
+            grappleTarget = null;
             isInOrbit = false;
         }
 
         if (Input.GetKeyUp(KeyCode.Escape))
         {
-            transform.position = Vector3.zero;
-            transform.rotation = Quaternion.identity;
+            Die();
         }
     }
 
@@ -141,46 +143,81 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 25, Time.deltaTime * 10);
+        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, Vector3.up * transform.position.y + Vector3.back * 25, Time.deltaTime * 10);
 
-        if (grapple == null || !isInOrbit)
+        if (grappleTarget == null || !isInOrbit)
         {
-            rigidbody.MovePosition(transform.position + velocity * Time.fixedDeltaTime);
+            rigidbody2D.MovePosition(transform.position + velocity * Time.fixedDeltaTime);
+            lineRenderer.enabled = false;
         }
-        if (grapple != null)
+        if (grappleTarget != null)
         {
             if (isInOrbit)
             {
-                Debug.DrawLine(transform.position, grapple.position, Color.green);
+                Debug.DrawLine(transform.position, grappleTarget.position, Color.green);
 
-                var connection = (transform.position - grapple.position).normalized;
+                var connection = (transform.position - grappleTarget.position).normalized;
                 var angle = Mathf.Atan2(connection.y, connection.x) / Mathf.PI * 180;
 
-                rigidbody.MovePosition(grapple.position + connection * distance + velocity.magnitude * transform.up * Time.fixedDeltaTime);
-                rigidbody.MoveRotation(Quaternion.Euler(0, 0, angle + (clockwise ? 180 : 0)));
+                rigidbody2D.MovePosition(grappleTarget.position + connection * distance + velocity.magnitude * transform.up * Time.fixedDeltaTime);
+                rigidbody2D.MoveRotation(angle + (clockwise ? 180 : 0));
             }
             else
             {
-                var distanceToPlanet = Vector3.Distance(transform.position, grapple.position);
+                var distanceToPlanet = Vector3.Distance(transform.position, grappleTarget.position);
 
                 if (distanceToPlanet > maximal_grapple_distance)
                 {
-                    grapple = null;
+                    grappleTarget = null;
                 }
                 else
                 {
-                    Debug.DrawLine(transform.position, grapple.position, Color.red);
+                    Debug.DrawLine(transform.position, grappleTarget.position, Color.red);
 
                     if (lastDistance < distanceToPlanet)
                     {
                         isInOrbit = true;
-                        distance = Vector3.Distance(transform.position, grapple.position);
-                        clockwise = GetAngle(grapple) < 0;
+                        distance = Vector3.Distance(transform.position, grappleTarget.position);
+                        clockwise = GetAngle(grappleTarget) < 0;
                         lastDistance = float.MaxValue;
                     }
                     lastDistance = distanceToPlanet;
                 }
             }
+
+            lineRenderer.enabled = true;
+            lineRenderer.SetPosition(0, transform.position);
+            lineRenderer.SetPosition(1, grappleTarget.position);
         }
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.name == "Planet")
+        {
+            Die();
+        }
+    }
+
+    void Die()
+    {
+        var tr = GetComponent<TrailRenderer>();
+        var time = tr.time;
+        tr.time = 0;
+
+        transform.position = Vector3.zero;
+        transform.rotation = Quaternion.identity;
+        isInOrbit = false;
+        grappleTarget = null;
+        velocity = Vector3.up * velocity.magnitude;
+        Camera.main.transform.position = Vector3.zero;
+
+        StartCoroutine(ShowTrail(tr, time));
+    }
+
+    IEnumerator ShowTrail(TrailRenderer tr, float time) {
+        yield return 0;
+        tr.time = time;
+    }
+
 }
