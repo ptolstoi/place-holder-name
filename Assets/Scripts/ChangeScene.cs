@@ -45,3 +45,4 @@ public class ChangeScene : MonoBehaviour {
         Destroy(this.gameObject);
     }
 }
+

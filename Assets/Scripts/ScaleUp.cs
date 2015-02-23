@@ -12,7 +12,7 @@ public class ScaleUp : MonoBehaviour {
     
     // Update is called once per frame
 	void Update () {
-        transform.localScale += transform.localScale * velocity * Time.deltaTime;
+        transform.localScale += Vector3.one * velocity * Time.deltaTime;
 
         if (transform.localScale.x >= maxScale)
         {
