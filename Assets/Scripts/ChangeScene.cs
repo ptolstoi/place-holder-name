@@ -4,21 +4,51 @@ using System.Collections;
 public class ChangeScene : MonoBehaviour {
 
     public int sceneNumber;
+    public float fadeOutSeconds=5;
+    public float fadeInSeconds= 5;
+    public GameObject fadeOut;
+    public GameObject fadein;
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
+    private static ChangeScene m_Instance = null;
+
+    private static ChangeScene Instance
+    {
+        get
+        {
+            if (m_Instance == null)
+            {
+                m_Instance = (new GameObject(" ChangeScene")).AddComponent<ChangeScene>();
+            }
+            return m_Instance;
+        }
+    }
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+        m_Instance = this;
+    }
+
+
 	// Update is called once per frame
 	void Update () {
 
-        if (Input.GetKeyDown(KeyCode.Space)){
-
-            AutoFade.LoadLevel(sceneNumber, 1, 1, Color.black);
-
-
         }
-	
-	}
+
+    public void stuff()
+    {
+        StartCoroutine("change");
+    }
+
+    private IEnumerator change()
+    {
+        Instantiate(fadeOut);
+        yield return new WaitForSeconds(fadeOutSeconds);
+        Debug.Log("loadlevel" + sceneNumber);
+        Application.LoadLevel(sceneNumber);
+        Debug.Log("instantiate circleIN");
+        Instantiate(fadein);
+        yield return new WaitForSeconds(fadeInSeconds);
+        Debug.Log("Destroy GO");
+        Destroy(this.gameObject);
+    }
 }
