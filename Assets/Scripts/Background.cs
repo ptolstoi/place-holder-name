@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Background : MonoBehaviour {
 
@@ -9,13 +10,13 @@ public class Background : MonoBehaviour {
     public int planetCount = 10;
     public GameObject planetPrefab;
 
-    private Vector2[] planetPositions;
+    private List<Vector2> planetPositions;
     private int maxTries = 3;
+    private int createdPlanets = 0;
 
 	// Use this for initialization
 	void Start () {
-        planetPositions = new Vector2[planetCount];
-
+        planetPositions = new List<Vector2>();
         for(int i = 0; i < planetCount; ++i)
         {
             int count = 0;
@@ -25,15 +26,18 @@ public class Background : MonoBehaviour {
             {
                 currPos = CalcPosition();
                 count++;
-                if(count == maxTries)
-                {
-                    currPos = new Vector2(-10.0f, -10.0f);
-                }
             }
-            planetPositions[i] = currPos;
+            if(count < maxTries)
+            {
+                planetPositions.Add(currPos);
+            }
+        }
 
+        foreach (Vector2 pos in planetPositions)
+        {         
             //Instantiate the prefabs
-            Instantiate(planetPrefab, new Vector3(planetPositions[i].x, planetPositions[i].y, 0.0f), Quaternion.identity);
+            Instantiate(planetPrefab, new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity);
+            createdPlanets++;
         }
 	}
 
