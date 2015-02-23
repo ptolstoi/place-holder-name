@@ -4,22 +4,31 @@ using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
+    const float maximal_grapple_distance = 20;
+
     public Background background;
     [SerializeField]
     private KeyCode TheOneButton = KeyCode.Space;
     private Transform[] planets;
 
-    private Transform grabble;
+    private Transform grapple;
     private float distance;
     private bool clockwise;
+
+    private Transform previous;
+    float lastDistance;
+
+    private bool isInOrbit;
+
+    public Vector3 velocity;
 
     // Use this for initialization
     void Start()
     {
-        if(background && background.planetCount > 0)
+        if (background && background.planetCount > 0)
         {
             planets = new Transform[background.planetCount];
-            for(int i = 0; i < background.planetCount; ++i)
+            for (int i = 0; i < background.planetCount; ++i)
             {
                 planets[i] = background.planets[i].transform;
             }
@@ -34,97 +43,144 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKey(TheOneButton) && grabble == null)
+        if (Input.GetKey(TheOneButton) && grapple == null)
         {
             var position = transform.position;
-            var planet = GetMatchingPlanet();
+            var planet = GetNearestPlanet();
 
             if (planet != null)
             {
-                grabble = planet;
+                grapple = planet;
+                lastDistance = float.MaxValue;
             }
         }
-        else if (Input.GetKeyUp(TheOneButton))
+        else if (Input.GetKeyUp(TheOneButton) && grapple != null)
         {
-            grabble = null;
+            velocity = velocity.magnitude * transform.up;
+            previous = grapple;
+            grapple = null;
+            isInOrbit = false;
         }
 
-        if(Input.GetKeyUp(KeyCode.Escape)) {
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
             transform.position = Vector3.zero;
             transform.rotation = Quaternion.identity;
         }
     }
 
-    Transform GetMatchingPlanet()
+    Transform GetNearestPlanet()
     {
+
         var possiblePlanets = (from p in planets
                                      let dist = Vector3.Distance(p.position, transform.position)
-                                     where dist < 10
+                                     where dist < maximal_grapple_distance
                                      orderby dist
                                      select p).ToArray();
 
-        var up = transform.up.normalized;
+        Transform result = null;
 
-        foreach (var planet in possiblePlanets)
+        var position = transform.position + velocity * 0.125f;
+        var minimalDistance = float.MaxValue;
+        var flag = false;
+
+        for (int i = 0; i < possiblePlanets.Length; i++)
         {
-            distance = Vector3.Distance(planet.position, transform.position);
+            var planet = possiblePlanets[i];
+            var distanceToPlanet = Vector3.Distance(planet.position, position);
 
-            var angle = GetAngle(planet);
-
-            clockwise = angle < 0;
-
-            angle = Mathf.Abs(angle);
-
-            var connection = (transform.position - planet.position).normalized;
-            var parallelAngle = Mathf.Atan2(connection.y, connection.x);
-            var rotation = Mathf.Atan2(up.y, up.x);
-
-            if (Mathf.Abs(angle - Mathf.PI / 2) < 0.2)
+            if (planet == previous)
             {
-                return planet;
+                if (distanceToPlanet > minimalDistance - 2.5f)
+                {
+                    continue;
+                }
             }
+            else
+            {
+                if (flag && distanceToPlanet > minimalDistance + 2.5f)
+                {
+                    continue;
+                }
+                if (distanceToPlanet > minimalDistance)
+                {
+                    continue;
+                }
+            }
+
+            if (Vector3.Distance(position + velocity.normalized * distanceToPlanet, planet.position) > 1)
+            {
+                flag = previous == planet;
+                result = planet;
+                minimalDistance = distance;
+            }
+
         }
 
-        if(possiblePlanets.Length == 1) {
-            return possiblePlanets[0];
-        }
-
-        return null;
+        return result;
+        
     }
 
-    float GetAngle(Transform planet) {
+    float GetAngle(Transform planet)
+    {
         var up = transform.up.normalized;
 
-            var connection = (transform.position - planet.position).normalized;
+        var connection = (transform.position - planet.position).normalized;
 
 
-            var angle = Mathf.Atan2(-connection.y, -connection.x) - Mathf.Atan2(up.y, up.x);
+        var angle = Mathf.Atan2(-connection.y, -connection.x) - Mathf.Atan2(up.y, up.x);
 
-            if (Mathf.Abs(angle) > Mathf.PI)
-            {
-                return -angle - Mathf.PI;
-            }
+        if (Mathf.Abs(angle) > Mathf.PI)
+        {
+            return -angle - Mathf.PI;
+        }
 
         return angle;
     }
 
     void FixedUpdate()
     {
-        transform.Translate(Vector3.up * Time.fixedDeltaTime * 20, Space.Self);
-        Debug.DrawRay(transform.position, transform.up * 2);
-
-        if (grabble != null)
-        {
-            Debug.DrawLine(transform.position, grabble.position);
-
-            var connection = (transform.position - grabble.position).normalized;
-            var angle = Mathf.Atan2(connection.y, connection.x) / Mathf.PI * 180;
-
-
-            transform.position = grabble.position + connection * distance;
-            transform.rotation = Quaternion.Euler(0, 0, angle + (clockwise ? 180 : 0));
-        }
 
         Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 25, Time.deltaTime * 10);
+
+        if (grapple == null || !isInOrbit)
+        {
+            rigidbody.MovePosition(transform.position + velocity * Time.fixedDeltaTime);
+        }
+        if (grapple != null)
+        {
+            if (isInOrbit)
+            {
+                Debug.DrawLine(transform.position, grapple.position, Color.green);
+
+                var connection = (transform.position - grapple.position).normalized;
+                var angle = Mathf.Atan2(connection.y, connection.x) / Mathf.PI * 180;
+
+                rigidbody.MovePosition(grapple.position + connection * distance + velocity.magnitude * transform.up * Time.fixedDeltaTime);
+                rigidbody.MoveRotation(Quaternion.Euler(0, 0, angle + (clockwise ? 180 : 0)));
+            }
+            else
+            {
+                var distanceToPlanet = Vector3.Distance(transform.position, grapple.position);
+
+                if (distanceToPlanet > maximal_grapple_distance)
+                {
+                    grapple = null;
+                }
+                else
+                {
+                    Debug.DrawLine(transform.position, grapple.position, Color.red);
+
+                    if (lastDistance < distanceToPlanet)
+                    {
+                        isInOrbit = true;
+                        distance = Vector3.Distance(transform.position, grapple.position);
+                        clockwise = GetAngle(grapple) < 0;
+                        lastDistance = float.MaxValue;
+                    }
+                    lastDistance = distanceToPlanet;
+                }
+            }
+        }
     }
 }

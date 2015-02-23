@@ -84,6 +84,7 @@ GameObject:
   - 4: {fileID: 57775542}
   - 33: {fileID: 57775541}
   - 23: {fileID: 57775540}
+  - 58: {fileID: 57775543}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -125,11 +126,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 57775539}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.39999998, y: 57.5, z: 0}
+  m_LocalPosition: {x: 1, y: 114, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
+--- !u!58 &57775543
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 57775539}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &164681296
 GameObject:
   m_ObjectHideFlags: 0
@@ -140,6 +152,7 @@ GameObject:
   - 4: {fileID: 164681299}
   - 33: {fileID: 164681298}
   - 23: {fileID: 164681297}
+  - 58: {fileID: 164681300}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -181,11 +194,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 164681296}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.94999981, y: 226.990005, z: 0}
+  m_LocalPosition: {x: 5, y: 284, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 29
+--- !u!58 &164681300
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 164681296}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &301519292
 GameObject:
   m_ObjectHideFlags: 0
@@ -196,6 +220,7 @@ GameObject:
   - 4: {fileID: 301519295}
   - 33: {fileID: 301519294}
   - 23: {fileID: 301519293}
+  - 58: {fileID: 301519296}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -237,11 +262,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 301519292}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.79999995, y: 65.8000031, z: 0}
+  m_LocalPosition: {x: -3, y: 123, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 10
+--- !u!58 &301519296
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 301519292}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &425018904
 GameObject:
   m_ObjectHideFlags: 0
@@ -252,6 +288,7 @@ GameObject:
   - 4: {fileID: 425018907}
   - 33: {fileID: 425018906}
   - 23: {fileID: 425018905}
+  - 58: {fileID: 425018908}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -293,11 +330,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 425018904}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.70000005, y: 103.199997, z: 0}
+  m_LocalPosition: {x: -3, y: 160, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 15
+--- !u!58 &425018908
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 425018904}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &446256068
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,6 +356,7 @@ GameObject:
   - 4: {fileID: 446256071}
   - 33: {fileID: 446256070}
   - 23: {fileID: 446256069}
+  - 58: {fileID: 446256072}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -349,11 +398,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 446256068}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .400000006, y: 30.5, z: 0}
+  m_LocalPosition: {x: 0, y: 87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 7
+--- !u!58 &446256072
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 446256068}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &560796164
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,6 +480,7 @@ GameObject:
   - 4: {fileID: 565611172}
   - 33: {fileID: 565611171}
   - 23: {fileID: 565611170}
+  - 58: {fileID: 565611173}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -461,11 +522,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 565611169}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .980000019, y: 11.3999996, z: 0}
+  m_LocalPosition: {x: 5, y: 65, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+--- !u!58 &565611173
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 565611169}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &614430034
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,6 +548,7 @@ GameObject:
   - 4: {fileID: 614430037}
   - 33: {fileID: 614430036}
   - 23: {fileID: 614430035}
+  - 58: {fileID: 614430038}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -517,11 +590,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 614430034}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.11999989, y: 168.880005, z: 0}
+  m_LocalPosition: {x: -2, y: 226, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 21
+--- !u!58 &614430038
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 614430034}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &804687117
 GameObject:
   m_ObjectHideFlags: 0
@@ -595,6 +679,7 @@ GameObject:
   - 4: {fileID: 849255037}
   - 33: {fileID: 849255036}
   - 23: {fileID: 849255035}
+  - 58: {fileID: 849255038}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -636,11 +721,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 849255034}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.44000006, y: 134.919998, z: 0}
+  m_LocalPosition: {x: 3, y: 192, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 18
+--- !u!58 &849255038
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 849255034}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &924307714
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,6 +747,7 @@ GameObject:
   - 4: {fileID: 924307717}
   - 33: {fileID: 924307716}
   - 23: {fileID: 924307715}
+  - 58: {fileID: 924307718}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -692,11 +789,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 924307714}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.70000005, y: 185.570007, z: 0}
+  m_LocalPosition: {x: 3, y: 243, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 22
+--- !u!58 &924307718
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 924307714}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1158167165
 GameObject:
   m_ObjectHideFlags: 0
@@ -707,6 +815,7 @@ GameObject:
   - 4: {fileID: 1158167168}
   - 33: {fileID: 1158167167}
   - 23: {fileID: 1158167166}
+  - 58: {fileID: 1158167169}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -748,11 +857,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1158167165}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 218.669998, z: 0}
+  m_LocalPosition: {x: 2, y: 276, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 27
+--- !u!58 &1158167169
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1158167165}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1193932801
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,6 +885,8 @@ GameObject:
   - 23: {fileID: 1193932802}
   - 114: {fileID: 1193932805}
   - 96: {fileID: 1193932806}
+  - 50: {fileID: 1193932808}
+  - 58: {fileID: 1193932807}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -823,7 +945,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26f4c0dab0fe74bfb9924f26d252ddad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  background: {fileID: 0}
   TheOneButton: 32
+  velocity: {x: 0, y: 20, z: 0}
 --- !u!96 &1193932806
 TrailRenderer:
   m_ObjectHideFlags: 0
@@ -836,7 +960,7 @@ TrailRenderer:
   m_LightmapIndex: 255
   m_LightmapTilingOffset: {x: 1, y: 1, z: 0, w: 0}
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 60a1200bc7e1e468cb6022c5c99eecf3, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 0
@@ -865,6 +989,32 @@ TrailRenderer:
       rgba: 16777215
   m_MinVertexDistance: .100000001
   m_Autodestruct: 0
+--- !u!58 &1193932807
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1193932801}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .773662567
+  m_Center: {x: 0, y: 0}
+--- !u!50 &1193932808
+Rigidbody2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1193932801}
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: .0500000007
+  m_GravityScale: 1
+  m_FixedAngle: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
 --- !u!1 &1213561155
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,6 +1025,7 @@ GameObject:
   - 4: {fileID: 1213561158}
   - 33: {fileID: 1213561157}
   - 23: {fileID: 1213561156}
+  - 58: {fileID: 1213561159}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -916,11 +1067,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1213561155}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.13999999, y: 212.529999, z: 0}
+  m_LocalPosition: {x: -1, y: 270, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 26
+--- !u!58 &1213561159
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1213561155}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1315059365
 GameObject:
   m_ObjectHideFlags: 0
@@ -931,6 +1093,7 @@ GameObject:
   - 4: {fileID: 1315059368}
   - 33: {fileID: 1315059367}
   - 23: {fileID: 1315059366}
+  - 58: {fileID: 1315059369}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -972,11 +1135,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1315059365}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.19999981, y: 38.5999985, z: 0}
+  m_LocalPosition: {x: -5, y: 96, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+--- !u!58 &1315059369
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1315059365}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1316426175
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,6 +1161,7 @@ GameObject:
   - 4: {fileID: 1316426178}
   - 33: {fileID: 1316426177}
   - 23: {fileID: 1316426176}
+  - 58: {fileID: 1316426179}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1028,11 +1203,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1316426175}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.10000002, y: 75, z: 0}
+  m_LocalPosition: {x: 1, y: 132, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 11
+--- !u!58 &1316426179
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1316426175}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1366598607
 GameObject:
   m_ObjectHideFlags: 0
@@ -1043,6 +1229,7 @@ GameObject:
   - 4: {fileID: 1366598610}
   - 33: {fileID: 1366598609}
   - 23: {fileID: 1366598608}
+  - 58: {fileID: 1366598611}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1084,11 +1271,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1366598607}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.9000001, y: 97.1999969, z: 0}
+  m_LocalPosition: {x: 6, y: 154, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 13
+--- !u!58 &1366598611
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1366598607}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1373790731
 GameObject:
   m_ObjectHideFlags: 0
@@ -1099,6 +1297,7 @@ GameObject:
   - 4: {fileID: 1373790734}
   - 33: {fileID: 1373790733}
   - 23: {fileID: 1373790732}
+  - 58: {fileID: 1373790735}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1140,11 +1339,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1373790731}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.99000001, y: 177.369995, z: 0}
+  m_LocalPosition: {x: 3, y: 234, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 23
+--- !u!58 &1373790735
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1373790731}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1520947533
 GameObject:
   m_ObjectHideFlags: 0
@@ -1155,6 +1365,7 @@ GameObject:
   - 4: {fileID: 1520947536}
   - 33: {fileID: 1520947535}
   - 23: {fileID: 1520947534}
+  - 58: {fileID: 1520947537}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1196,11 +1407,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1520947533}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.70000005, y: 47.7999992, z: 0}
+  m_LocalPosition: {x: 2, y: 105, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
+--- !u!58 &1520947537
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1520947533}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1571602919
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,6 +1433,7 @@ GameObject:
   - 4: {fileID: 1571602922}
   - 33: {fileID: 1571602921}
   - 23: {fileID: 1571602920}
+  - 58: {fileID: 1571602923}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1252,11 +1475,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1571602919}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: .899999976, y: 42.2000008, z: 0}
+  m_LocalPosition: {x: 1, y: 99, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!58 &1571602923
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1571602919}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1578060849
 GameObject:
   m_ObjectHideFlags: 0
@@ -1267,6 +1501,7 @@ GameObject:
   - 4: {fileID: 1578060852}
   - 33: {fileID: 1578060851}
   - 23: {fileID: 1578060850}
+  - 58: {fileID: 1578060853}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1308,11 +1543,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1578060849}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.72000003, y: 114.5, z: 0}
+  m_LocalPosition: {x: 2, y: 171, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 16
+--- !u!58 &1578060853
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1578060849}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1761412951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1323,6 +1569,7 @@ GameObject:
   - 4: {fileID: 1761412954}
   - 33: {fileID: 1761412953}
   - 23: {fileID: 1761412952}
+  - 58: {fileID: 1761412955}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1364,11 +1611,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1761412951}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.6400001, y: 123.050003, z: 0}
+  m_LocalPosition: {x: -3, y: 180, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 17
+--- !u!58 &1761412955
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1761412951}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1902333407
 GameObject:
   m_ObjectHideFlags: 0
@@ -1463,6 +1721,7 @@ GameObject:
   - 4: {fileID: 1922039159}
   - 33: {fileID: 1922039158}
   - 23: {fileID: 1922039157}
+  - 58: {fileID: 1922039160}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1504,11 +1763,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1922039156}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.19999981, y: 83.5999985, z: 0}
+  m_LocalPosition: {x: -4, y: 141, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 12
+--- !u!58 &1922039160
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1922039156}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1936860283
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,6 +1789,7 @@ GameObject:
   - 4: {fileID: 1936860286}
   - 33: {fileID: 1936860285}
   - 23: {fileID: 1936860284}
+  - 58: {fileID: 1936860287}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1560,11 +1831,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1936860283}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.42000008, y: 231.410004, z: 0}
+  m_LocalPosition: {x: -3, y: 288, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 30
+--- !u!58 &1936860287
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1936860283}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1959334324
 GameObject:
   m_ObjectHideFlags: 0
@@ -1575,6 +1857,7 @@ GameObject:
   - 4: {fileID: 1959334327}
   - 33: {fileID: 1959334326}
   - 23: {fileID: 1959334325}
+  - 58: {fileID: 1959334328}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1616,11 +1899,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1959334324}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.20000005, y: 88.5999985, z: 0}
+  m_LocalPosition: {x: 2, y: 146, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 14
+--- !u!58 &1959334328
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1959334324}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1963064122
 GameObject:
   m_ObjectHideFlags: 0
@@ -1631,6 +1925,7 @@ GameObject:
   - 4: {fileID: 1963064125}
   - 33: {fileID: 1963064124}
   - 23: {fileID: 1963064123}
+  - 58: {fileID: 1963064126}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1672,11 +1967,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1963064122}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.77999997, y: 155.509995, z: 0}
+  m_LocalPosition: {x: 2, y: 212, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 20
+--- !u!58 &1963064126
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1963064122}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &1975946610
 GameObject:
   m_ObjectHideFlags: 0
@@ -1687,6 +1993,7 @@ GameObject:
   - 4: {fileID: 1975946613}
   - 33: {fileID: 1975946612}
   - 23: {fileID: 1975946611}
+  - 58: {fileID: 1975946614}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1728,11 +2035,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1975946610}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.21000004, y: 141.690002, z: 0}
+  m_LocalPosition: {x: -3, y: 199, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 19
+--- !u!58 &1975946614
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1975946610}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &2018032861
 GameObject:
   m_ObjectHideFlags: 0
@@ -1743,6 +2061,7 @@ GameObject:
   - 4: {fileID: 2018032864}
   - 33: {fileID: 2018032863}
   - 23: {fileID: 2018032862}
+  - 58: {fileID: 2018032865}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1784,11 +2103,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2018032861}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.13000011, y: 203.75, z: 0}
+  m_LocalPosition: {x: 2, y: 261, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 25
+--- !u!58 &2018032865
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2018032861}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &2042442518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1799,6 +2129,7 @@ GameObject:
   - 4: {fileID: 2042442521}
   - 33: {fileID: 2042442520}
   - 23: {fileID: 2042442519}
+  - 58: {fileID: 2042442522}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1840,11 +2171,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2042442518}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.69000006, y: 222.399994, z: 0}
+  m_LocalPosition: {x: -5, y: 279, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 28
+--- !u!58 &2042442522
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2042442518}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &2081929851
 GameObject:
   m_ObjectHideFlags: 0
@@ -1855,6 +2197,7 @@ GameObject:
   - 4: {fileID: 2081929854}
   - 33: {fileID: 2081929853}
   - 23: {fileID: 2081929852}
+  - 58: {fileID: 2081929855}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1896,11 +2239,22 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2081929851}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -.680000007, y: 194.460007, z: 0}
+  m_LocalPosition: {x: -1, y: 251, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 24
+--- !u!58 &2081929855
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2081929851}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
 --- !u!1 &2127612138
 GameObject:
   m_ObjectHideFlags: 0
@@ -1911,6 +2265,7 @@ GameObject:
   - 4: {fileID: 2127612141}
   - 33: {fileID: 2127612140}
   - 23: {fileID: 2127612139}
+  - 58: {fileID: 2127612142}
   m_Layer: 0
   m_Name: Planet
   m_TagString: Untagged
@@ -1952,8 +2307,19 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2127612138}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.5, y: 22.5, z: 0}
+  m_LocalPosition: {x: 4, y: 79, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
+--- !u!58 &2127612142
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2127612138}
+  m_Enabled: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Radius: .50000006
+  m_Center: {x: 5.96046448e-08, y: 0}
