@@ -17,7 +17,7 @@ public class ChangeScene : MonoBehaviour {
         {
             if (m_Instance == null)
             {
-                m_Instance = (new GameObject(" ChangeScene")).AddComponent<ChangeScene>();
+                m_Instance = (new GameObject("ChangeScene")).AddComponent<ChangeScene>();
             }
             return m_Instance;
         }
@@ -28,12 +28,6 @@ public class ChangeScene : MonoBehaviour {
         m_Instance = this;
     }
 
-
-	// Update is called once per frame
-	void Update () {
-
-        }
-
     public void stuff()
     {
         StartCoroutine("change");
@@ -43,12 +37,11 @@ public class ChangeScene : MonoBehaviour {
     {
         Instantiate(fadeOut);
         yield return new WaitForSeconds(fadeOutSeconds);
-        Debug.Log("loadlevel" + sceneNumber);
         Application.LoadLevel(sceneNumber);
         Debug.Log("instantiate circleIN");
         Instantiate(fadein);
         yield return new WaitForSeconds(fadeInSeconds);
-        Debug.Log("Destroy GO");
+       
         Destroy(this.gameObject);
     }
 }
