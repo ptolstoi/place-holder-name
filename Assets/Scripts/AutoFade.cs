@@ -64,6 +64,7 @@ public class AutoFade : MonoBehaviour
             DrawQuad(aColor, t);
         }
         m_Fading = false;
+
     }
     private void StartFade(float aFadeOutTime, float aFadeInTime, Color aColor)
     {

@@ -11,12 +11,14 @@ public class Background : MonoBehaviour {
     public GameObject planetPrefab;
 
     private List<Vector2> planetPositions;
+    public List<GameObject> planets;
     private int maxTries = 3;
-    private int createdPlanets = 0;
+    public int createdPlanets = 0;
 
 	// Use this for initialization
 	void Start () {
         planetPositions = new List<Vector2>();
+        planets = new List<GameObject>();
         for(int i = 0; i < planetCount; ++i)
         {
             int count = 0;
@@ -36,7 +38,7 @@ public class Background : MonoBehaviour {
         foreach (Vector2 pos in planetPositions)
         {         
             //Instantiate the prefabs
-            Instantiate(planetPrefab, new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity);
+            planets.Add((GameObject)Instantiate(planetPrefab, new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity));
             createdPlanets++;
         }
 	}
