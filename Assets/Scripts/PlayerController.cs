@@ -5,7 +5,7 @@ using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
-
+    public Background background;
     [SerializeField]
     private KeyCode TheOneButton = KeyCode.Space;
     private Transform[] planets;
@@ -17,7 +17,18 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        planets = GameObject.FindObjectsOfType<Transform>().Where(a => a.name == "Planet").ToArray();
+        if(background && background.planetCount > 0)
+        {
+            planets = new Transform[background.planetCount];
+            for(int i = 0; i < background.planetCount; ++i)
+            {
+                planets[i] = background.planets[i].transform;
+            }
+        }
+        else
+        {
+            planets = GameObject.FindObjectsOfType<Transform>().Where(a => a.name == "Planet").ToArray();
+        }
     }
 
     // Update is called once per frame
