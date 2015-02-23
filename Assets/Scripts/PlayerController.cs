@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
-using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -24,32 +23,78 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(TheOneButton))
+        if (Input.GetKey(TheOneButton) && grabble == null)
         {
             var position = transform.position;
-            var planet = planets.OrderBy(p => Vector3.Distance(p.position, position)).First();
+            var planet = GetMatchingPlanet();
 
-            distance = Vector3.Distance(planet.position, transform.position);
-
-            grabble = planet;
-
-            var up = transform.up.normalized;
-
-            var connection = (transform.position - grabble.position).normalized;
-
-
-            var angle = Mathf.Atan2(-connection.y, -connection.x) - Mathf.Atan2(up.y, up.x);
-
-            if(Mathf.Abs(angle) > Mathf.PI) {
-                angle = -angle - Mathf.PI;
+            if (planet != null)
+            {
+                grabble = planet;
             }
-
-            clockwise = angle < 0;
         }
         else if (Input.GetKeyUp(TheOneButton))
         {
             grabble = null;
         }
+
+        if(Input.GetKeyUp(KeyCode.Escape)) {
+            transform.position = Vector3.zero;
+            transform.rotation = Quaternion.identity;
+        }
+    }
+
+    Transform GetMatchingPlanet()
+    {
+        var possiblePlanets = (from p in planets
+                                     let dist = Vector3.Distance(p.position, transform.position)
+                                     where dist < 10
+                                     orderby dist
+                                     select p).ToArray();
+
+        var up = transform.up.normalized;
+
+        foreach (var planet in possiblePlanets)
+        {
+            distance = Vector3.Distance(planet.position, transform.position);
+
+            var angle = GetAngle(planet);
+
+            clockwise = angle < 0;
+
+            angle = Mathf.Abs(angle);
+
+            var connection = (transform.position - planet.position).normalized;
+            var parallelAngle = Mathf.Atan2(connection.y, connection.x);
+            var rotation = Mathf.Atan2(up.y, up.x);
+
+            if (Mathf.Abs(angle - Mathf.PI / 2) < 0.2)
+            {
+                return planet;
+            }
+        }
+
+        if(possiblePlanets.Length == 1) {
+            return possiblePlanets[0];
+        }
+
+        return null;
+    }
+
+    float GetAngle(Transform planet) {
+        var up = transform.up.normalized;
+
+            var connection = (transform.position - planet.position).normalized;
+
+
+            var angle = Mathf.Atan2(-connection.y, -connection.x) - Mathf.Atan2(up.y, up.x);
+
+            if (Mathf.Abs(angle) > Mathf.PI)
+            {
+                return -angle - Mathf.PI;
+            }
+
+        return angle;
     }
 
     void FixedUpdate()
@@ -62,12 +107,13 @@ public class PlayerController : MonoBehaviour
             Debug.DrawLine(transform.position, grabble.position);
 
             var connection = (transform.position - grabble.position).normalized;
-            var dir = new Vector2(connection.x, connection.y);
-            var angle = Mathf.Atan2(dir.y, dir.x) / Mathf.PI * 180;
+            var angle = Mathf.Atan2(connection.y, connection.x) / Mathf.PI * 180;
 
 
             transform.position = grabble.position + connection * distance;
             transform.rotation = Quaternion.Euler(0, 0, angle + (clockwise ? 180 : 0));
         }
+
+        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 25, Time.deltaTime * 10);
     }
 }
