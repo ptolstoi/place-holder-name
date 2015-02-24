@@ -1,7 +1,6 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
-using System.IO;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -37,7 +36,8 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            planets = GameObject.FindObjectsOfType<Transform>().Where(a => a.name == "Planet").ToArray();
+            planets = FindObjectsOfType<Transform>().
+                Where(a => a.gameObject.layer == LayerMask.NameToLayer("Planet")).ToArray();
         }
 
         lineRenderer = GetComponent<LineRenderer>();
@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, Vector3.up * transform.position.y + Vector3.back * 25, Time.deltaTime * 10);
+        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 25, Time.deltaTime * 10);
 
         if (grappleTarget == null || !isInOrbit)
         {
@@ -185,15 +185,20 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            lineRenderer.enabled = true;
-            lineRenderer.SetPosition(0, transform.position);
-            lineRenderer.SetPosition(1, grappleTarget.position);
+            lineRenderer.enabled = grappleTarget != null;
+
+            if (grappleTarget != null)
+            {
+                lineRenderer.SetPosition(0, transform.position);
+                lineRenderer.SetPosition(1, grappleTarget.position);
+            }
         }
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.name == "Planet")
+        Debug.Log("trigger enter" + LayerMask.LayerToName(other.gameObject.layer));
+        if (other.gameObject.layer == LayerMask.NameToLayer("Planet"))
         {
             Die();
         }
