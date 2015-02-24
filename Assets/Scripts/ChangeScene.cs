@@ -8,6 +8,7 @@ public class ChangeScene : MonoBehaviour {
     public float fadeInSeconds= 5;
     public GameObject fadeOut;
     public GameObject fadein;
+    
 
     private static ChangeScene m_Instance = null;
 
@@ -35,6 +36,7 @@ public class ChangeScene : MonoBehaviour {
 
     private IEnumerator change()
     {
+        
         Instantiate(fadeOut);
         yield return new WaitForSeconds(fadeOutSeconds);
         Application.LoadLevel(sceneNumber);
