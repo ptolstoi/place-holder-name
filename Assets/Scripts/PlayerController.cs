@@ -27,12 +27,15 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        if (background && background.planetCount > 0)
+        int planetCount = background.planets.Count;
+        if (background && planetCount > 0)
         {
-            planets = new Transform[background.planetCount];
-            for (int i = 0; i < background.planetCount; ++i)
+            planets = new Transform[planetCount];
+            int count = 0;
+            foreach(GameObject p in background.planets)
             {
-                planets[i] = background.planets[i].transform;
+                planets[count] = p.transform;
+                count++;
             }
         }
         else
