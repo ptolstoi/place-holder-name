@@ -40,10 +40,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneNumber: 1
-  fadeOutSeconds: 5
-  fadeInSeconds: 5
+  fadeOutSeconds: .899999976
+  fadeInSeconds: 2
   fadeOut: {fileID: 190236, guid: 3a3b263a480e5504e9fa5c35cb496b2d, type: 2}
-  fadein: {fileID: 124176, guid: 0b08ebd03f9662b4588d594fa776e72f, type: 2}
+  fadein: {fileID: 120022, guid: f72ea08e54c0d0f4ca6154795be70299, type: 2}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
