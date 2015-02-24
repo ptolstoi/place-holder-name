@@ -10,28 +10,33 @@ public class Background : MonoBehaviour {
     public int planetCount = 10;
     public GameObject planetPrefab;
 
-    private List<Vector2> planetPositions;
-    public List<GameObject> planets;
-    private int maxTries = 3;
+    private List<Vector2> planetPositions = new List<Vector2>();
+    public List<GameObject> planets = new List<GameObject>();
+    private int maxTries = 10;
     public int createdPlanets = 0;
 
 	// Use this for initialization
 	void Start () {
-        planetPositions = new List<Vector2>();
-        planets = new List<GameObject>();
+
+        int addedPlanets = 0;
         for(int i = 0; i < planetCount; ++i)
         {
             int count = 0;
-            Vector2 currPos = CalcPosition();  
+            Vector2 currPos = CalcPosition();
             //calculate new position if the distance to the other planets is too small
-            while(!CheckDistance(currPos, i) && count < maxTries)
+            while(count < maxTries)
             {
-                currPos = CalcPosition();
-                count++;
-            }
-            if(count < maxTries)
-            {
-                planetPositions.Add(currPos);
+                if(!CheckDistance(currPos))
+                {
+                    currPos = CalcPosition();
+                    count++;
+                }
+                else
+                {
+                    planetPositions.Add(currPos);
+                    addedPlanets++;
+                    break;
+                }
             }
         }
 
@@ -43,14 +48,21 @@ public class Background : MonoBehaviour {
         }
 	}
 
-    private bool CheckDistance(Vector2 pos, int index)
+    private bool CheckDistance(Vector2 pos)
     {
-        for(int i = 0; i < index; ++i)
+        foreach(Vector2 pPos in planetPositions)
         {
-            float distance = Vector2.Distance(pos, planetPositions[i]);
+            float distance = Vector2.Distance(pos, pPos);
             if (distance < minDistance)
                 return false;
         }
+
+        //for(int i = 0; i < index; ++i)
+        //{
+        //    float distance = Vector2.Distance(pos, planetPositions[i]);
+        //    if (distance < minDistance)
+        //        return false;
+        //}
         return true;
     }
 
