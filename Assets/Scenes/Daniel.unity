@@ -85,7 +85,7 @@ GameObject:
   - 4: {fileID: 34355191}
   - 33: {fileID: 34355193}
   - 23: {fileID: 34355192}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +194,7 @@ GameObject:
   - 50: {fileID: 540750818}
   - 58: {fileID: 540750817}
   - 120: {fileID: 540750816}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -204,7 +204,7 @@ GameObject:
 --- !u!120 &540750816
 LineRenderer:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 12000202, guid: 43d57d4daec3c1048b0d1218a3068e97,
+  m_PrefabParentObject: {fileID: 12000460, guid: 43d57d4daec3c1048b0d1218a3068e97,
     type: 2}
   m_PrefabInternal: {fileID: 1829478503}
   m_GameObject: {fileID: 540750815}
@@ -238,7 +238,7 @@ LineRenderer:
 --- !u!58 &540750817
 CircleCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 5800202, guid: 43d57d4daec3c1048b0d1218a3068e97,
+  m_PrefabParentObject: {fileID: 5800460, guid: 43d57d4daec3c1048b0d1218a3068e97,
     type: 2}
   m_PrefabInternal: {fileID: 1829478503}
   m_GameObject: {fileID: 540750815}
@@ -250,7 +250,7 @@ CircleCollider2D:
 --- !u!50 &540750818
 Rigidbody2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 5000202, guid: 43d57d4daec3c1048b0d1218a3068e97,
+  m_PrefabParentObject: {fileID: 5000460, guid: 43d57d4daec3c1048b0d1218a3068e97,
     type: 2}
   m_PrefabInternal: {fileID: 1829478503}
   m_GameObject: {fileID: 540750815}
@@ -319,7 +319,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 401436843}
   TheOneButton: 13
-  velocity: {x: 0, y: 25, z: 0}
+  velocity: {x: 0, y: 5, z: 0}
 --- !u!23 &540750821
 Renderer:
   m_ObjectHideFlags: 0
@@ -372,7 +372,7 @@ GameObject:
   - 4: {fileID: 998406391}
   - 33: {fileID: 998406393}
   - 23: {fileID: 998406392}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -463,6 +463,10 @@ Prefab:
       propertyPath: background
       value: 
       objectReference: {fileID: 401436843}
+    - target: {fileID: 11438432, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
+      propertyPath: velocity.y
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
   m_RootGameObject: {fileID: 2108981169}
@@ -514,6 +518,10 @@ Prefab:
     - target: {fileID: 11438432, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: TheOneButton
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 11438432, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
+      propertyPath: velocity.y
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
@@ -616,6 +624,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a0df09e4552c7f4bb81f7f98fcda748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minDistance: -20
 --- !u!1 &2108981169
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,7 +640,7 @@ GameObject:
   - 50: {fileID: 2108981177}
   - 58: {fileID: 2108981176}
   - 120: {fileID: 2108981175}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -694,7 +703,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 401436843}
   TheOneButton: 32
-  velocity: {x: 0, y: 25, z: 0}
+  velocity: {x: 0, y: 5, z: 0}
 --- !u!23 &2108981172
 Renderer:
   m_ObjectHideFlags: 0
@@ -740,7 +749,7 @@ Transform:
 --- !u!120 &2108981175
 LineRenderer:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 12000202, guid: 43d57d4daec3c1048b0d1218a3068e97,
+  m_PrefabParentObject: {fileID: 12000460, guid: 43d57d4daec3c1048b0d1218a3068e97,
     type: 2}
   m_PrefabInternal: {fileID: 1478717413}
   m_GameObject: {fileID: 2108981169}
@@ -774,7 +783,7 @@ LineRenderer:
 --- !u!58 &2108981176
 CircleCollider2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 5800202, guid: 43d57d4daec3c1048b0d1218a3068e97,
+  m_PrefabParentObject: {fileID: 5800460, guid: 43d57d4daec3c1048b0d1218a3068e97,
     type: 2}
   m_PrefabInternal: {fileID: 1478717413}
   m_GameObject: {fileID: 2108981169}
@@ -786,7 +795,7 @@ CircleCollider2D:
 --- !u!50 &2108981177
 Rigidbody2D:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 5000202, guid: 43d57d4daec3c1048b0d1218a3068e97,
+  m_PrefabParentObject: {fileID: 5000460, guid: 43d57d4daec3c1048b0d1218a3068e97,
     type: 2}
   m_PrefabInternal: {fileID: 1478717413}
   m_GameObject: {fileID: 2108981169}

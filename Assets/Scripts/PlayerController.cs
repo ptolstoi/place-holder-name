@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 25, Time.deltaTime * 10);
+        //Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 25, Time.deltaTime * 10);
 
         if (grappleTarget == null || !isInOrbit)
         {
