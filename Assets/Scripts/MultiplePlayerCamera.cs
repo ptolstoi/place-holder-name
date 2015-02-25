@@ -8,15 +8,11 @@ public class MultiplePlayerCamera : MonoBehaviour {
     private float startDistance = 0.0f;
     private float frustumWidth, frustumHeight;
     public float minDistance = -10.0f;
-    public float offset = 2.0f;
-    private bool cameraRotated = false;
-    private float prevScale = 0.0f;
 
 	// Use this for initialization
 	void Start () {
         players = GameObject.FindGameObjectsWithTag("Player");
         startDistance = Camera.main.transform.position.z;
-        cameraRotated = Camera.main.transform.rotation != Quaternion.identity;
 
         CalcFrustumDimnensionW();
 	}
@@ -27,14 +23,7 @@ public class MultiplePlayerCamera : MonoBehaviour {
         {
             CalculateBounds();
 
-            if(cameraRotated)
-                ProjectPoints();
-
             CalculateCameraPosition();
-        }
-        else if (players.Length == 1)
-        {
-            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, new Vector3(players[0].transform.position.x, players[0].transform.position.y, minDistance), Time.deltaTime * 100);
         }
 	}
 
@@ -49,53 +38,24 @@ public class MultiplePlayerCamera : MonoBehaviour {
             
             //x bounds
             if (pos.x < minW.x)
-                minW.x = pos.x - offset;
+                minW.x = pos.x;
             if (pos.x > maxW.x)
-                maxW.x = pos.x + offset;
+                maxW.x = pos.x;
 
             //y bounds
             if (pos.y < minW.y)
-                minW.y = pos.y - offset;
+                minW.y = pos.y;
             if (pos.y > maxW.y)
-                maxW.y = pos.y + offset;
-        }
-    }
-
-    private void ProjectPoints()
-    {
-        Transform cam = Camera.main.transform;
-        Vector3 normal = cam.forward.normalized;
-        float distance = Mathf.Abs(Camera.main.transform.position.z);
-        Vector3 point = normal * distance;
-        Plane frustumPlane = new Plane(normal, point);
-
-        //project min and max points to the plane
-        Vector3 direction = new Vector3(0.0f, 0.0f, 1.0f);
-        Vector3 min = new Vector3(minW.x, minW.y, 0.0f);
-        Ray minRay = new Ray(min, direction);
-        Vector3 max = new Vector3(maxW.x, maxW.y, 0.0f);
-        Ray maxRay = new Ray(max, direction);
-
-        float minDistance, maxDistance;
-        if(frustumPlane.Raycast(minRay, out minDistance) && frustumPlane.Raycast(maxRay, out maxDistance))
-        {
-            Vector3 minPlane = min + direction * minDistance;
-            Vector3 maxPlane = max + direction * maxDistance;
-            //rotate according to the negative angle
-            Quaternion rot = Quaternion.Inverse(cam.rotation);
-            minW = rot * (minPlane - cam.position) + cam.position;
-            maxW = rot * (maxPlane - cam.position) + cam.position;
+                maxW.y = pos.y;
         }
     }
 
     void CalculateCameraPosition()
     {
         Vector3 center = (minW + maxW) * 0.5f;
-        Debug.Log(center);
         center.z = Camera.main.transform.position.z;
 
         float scale = CalcScaling();
-        scale = Mathf.Lerp(prevScale, scale, Time.deltaTime * 10);
 
         Vector3 position = center;
         float distance = CalcNewDistance(scale);
@@ -107,16 +67,57 @@ public class MultiplePlayerCamera : MonoBehaviour {
         {
             position.z = distance;
         }
+        //Debug.Log(position.z);
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, position, Time.deltaTime * 30);
+        Camera.main.transform.position = position;
+        //Vector3 pos = (min + max) * 0.5f;
 
-        prevScale = scale;
+        //Vector3 magnitudeVector = Vector3.Cross(pos, Vector3.up) * -1.0f;
+
+        //pos.z = startDistance + magnitudeVector.z;
+        //Camera.main.transform.position = pos;
+        //Vector3 cameraDistance = Vector3.Cross(pos, Vector3.up) * -1.0f;
+        //float magnitude = cameraDistance.magnitude;
+        //pos.z = startDistance;
+
+        //Vector3 minPoint = Camera.main.WorldToScreenPoint(minPos);
+        //Vector3 maxPoint = Camera.main.WorldToScreenPoint(maxPos);
+
+        //float zoom = ZoomCamera(minPoint, maxPoint);
+        
+        //if (minPoint != maxPoint)
+        //{
+        //    //float zoomFactor = ZoomCamera(minPoint, maxPoint);
+        //    //Debug.Log(zoomFactor);
+        ////    pos.z = startDistance * zoomFactor;
+        //}
+        ////Camera.main.transform.position = pos;
+        //CalcAngle();
     }
+
+    //private float ZoomCamera(Vector3 minScreen, Vector3 maxScreen)
+    //{
+    //    float width = Camera.main.pixelWidth;
+    //    float height = Camera.main.pixelHeight;
+    //    Vector3 pos = maxScreen - minScreen;
+    //    float scaleX = Mathf.Abs( pos.x )/ width;
+    //    float scaleY = Mathf.Abs( pos.y )/ height;
+
+    //    float totalScale = Mathf.Max(scaleX, scaleY);
+    //    return totalScale;
+    //}
+
+    //private float CalcAngle()
+    //{
+    //    float distance = Mathf.Abs(Camera.main.transform.position.z);
+    //    float frustumHeight = 2.0f * distance * Mathf.Tan(Camera.main.fieldOfView * 0.5f * Mathf.Deg2Rad);
+    //    Debug.Log(frustumHeight);
+    //    return frustumHeight;
+    //}
 
     private void CalcFrustumDimnensionW()
     {
-        float distance = 0.0f;
-        distance = Mathf.Abs(Camera.main.transform.position.z);
+        float distance = Mathf.Abs(Camera.main.transform.position.z);
         frustumHeight = 2.0f * distance * Mathf.Tan(Camera.main.fieldOfView * 0.5f * Mathf.Deg2Rad);
         frustumWidth = frustumHeight * Camera.main.aspect;
     }
@@ -125,6 +126,7 @@ public class MultiplePlayerCamera : MonoBehaviour {
     {
         float width = maxW.x - minW.x;
         float height = maxW.y - minW.y;
+        Debug.Log(new Vector2(width, height));
 
         float scaleX = width / frustumWidth;
         float scaleY = height / frustumHeight;
@@ -138,7 +140,9 @@ public class MultiplePlayerCamera : MonoBehaviour {
         if (scale == 0.0f)
             scale = 1.0f;
         float height = frustumHeight * scale;
+        //Debug.Log(height);
         float distance = height * 0.5f / Mathf.Tan(Camera.main.fieldOfView * 0.5f * Mathf.Deg2Rad);
+        //Debug.Log(scale);
         return distance * -1.0f;
     }
 }
