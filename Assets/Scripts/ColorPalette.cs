@@ -14,7 +14,7 @@ public static class ColorPalette {
     public static Color CalcColor(int i, int maxPlayers = 4)
     {
         const float start = -60;
-        return Utils.ToColor(start + (180.0f/(maxPlayers - 1))*i, 0.5f, 0.9f, 1);
+        return Utils.ToColor(start + (180.0f/(maxPlayers - 1))*i, 0.5f, 0.8f, 1);
     }
 
     public static Color GetColor(this Player player)

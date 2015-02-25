@@ -13,7 +13,6 @@ public class PointGUI : MonoBehaviour
 	void Start () {
 	    foreach (var stat in Background.ownership)
 	    {
-            print((int)stat.Key);
 	        Players[(int) stat.Key].color = stat.Key.GetColor();
 	    }
 	

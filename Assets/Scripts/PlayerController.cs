@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public KeyCode TheOneButton = KeyCode.Space;
     public Player Player = Player.Player1;
 
+    public SpriteRenderer PlayerSprite;
+
     private Planet[] planets;
 
     private Planet grappledPlanet;
@@ -22,6 +24,7 @@ public class PlayerController : MonoBehaviour
     private bool isInOrbit;
 
     public Vector3 velocity;
+    private Trail trail;
     private LineRenderer lineRenderer;
 
     // Use this for initialization
@@ -47,6 +50,13 @@ public class PlayerController : MonoBehaviour
         }
 
         lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.material.color = Player.GetColor();
+        
+        var trailController = GetComponentInChildren<TrailMaterialControler>();
+        trailController.Color = Player.GetColor();
+        trail = GetComponentInChildren<Trail>();
+
+        PlayerSprite.color = Player.GetColor();
     }
 
     // Update is called once per frame
@@ -191,8 +201,8 @@ public class PlayerController : MonoBehaviour
 
             if (grappledPlanet != null)
             {
-                lineRenderer.SetPosition(0, transform.position);
-                lineRenderer.SetPosition(1, grappledPlanet.transform.position);
+                lineRenderer.SetPosition(0, transform.position + transform.up * 0.5f);
+                lineRenderer.SetPosition(1, grappledPlanet.OuterPlanet.position);
             }
         }
     }
@@ -247,17 +257,8 @@ public class PlayerController : MonoBehaviour
         isInOrbit = false;
         grappledPlanet = null;
         velocity = Vector3.up * velocity.magnitude;
-        Camera.main.transform.position = Vector3.zero;
 
-        StartCoroutine(ShowTrail());
-    }
-
-    IEnumerator ShowTrail() {
-        var tr = GetComponent<TrailRenderer>();
-        var time = tr.time;
-        tr.time = 0;
-        yield return 0;
-        tr.time = time;
+        trail.Reset();
     }
 
 }
