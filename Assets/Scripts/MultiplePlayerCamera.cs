@@ -10,6 +10,7 @@ public class MultiplePlayerCamera : MonoBehaviour {
     public float minDistance = -10.0f;
     public float offset = 2.0f;
     private bool cameraRotated = false;
+    private float prevScale = 0.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -94,6 +95,7 @@ public class MultiplePlayerCamera : MonoBehaviour {
         center.z = Camera.main.transform.position.z;
 
         float scale = CalcScaling();
+        scale = Mathf.Lerp(prevScale, scale, Time.deltaTime * 10);
 
         Vector3 position = center;
         float distance = CalcNewDistance(scale);
@@ -106,7 +108,9 @@ public class MultiplePlayerCamera : MonoBehaviour {
             position.z = distance;
         }
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, position, Time.deltaTime * 30);       
+        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, position, Time.deltaTime * 30);
+
+        prevScale = scale;
     }
 
     private void CalcFrustumDimnensionW()
