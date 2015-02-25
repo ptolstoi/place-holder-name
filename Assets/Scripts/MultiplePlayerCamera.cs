@@ -108,7 +108,7 @@ public class MultiplePlayerCamera : MonoBehaviour {
             position.z = distance;
         }
 
-        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, position, Time.deltaTime * 30);
+        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, position - Vector3.up * 10, Time.deltaTime * 15);
 
         prevScale = scale;
     }
