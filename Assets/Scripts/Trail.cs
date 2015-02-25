@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 public class Trail : MonoBehaviour
 {
@@ -94,7 +95,6 @@ public class Trail : MonoBehaviour
                     smoothedSection.Bitangent += nextSection.Bitangent;
                 }
 
-                int k = window.Length - 1;
                 smoothedSection.Position += currentSection.Position;
                 smoothedSection.Bitangent += currentSection.Bitangent;
 
@@ -138,7 +138,11 @@ public class Trail : MonoBehaviour
             mesh.uv = uv;
             mesh.triangles = triangles;
         }
+    }
 
+    public void Reset()
+    {
+        sections.Clear();
     }
 
     private class TrailSection

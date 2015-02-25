@@ -23,6 +23,9 @@ public class PlayerController : MonoBehaviour
     public Vector3 velocity;
     private LineRenderer lineRenderer;
 
+    private Trail trailScript;
+
+
     // Use this for initialization
     void Start()
     {
@@ -31,7 +34,7 @@ public class PlayerController : MonoBehaviour
         {
             planets = new Transform[planetCount];
             int count = 0;
-            foreach(GameObject p in background.planets)
+            foreach (GameObject p in background.planets)
             {
                 planets[count] = p.transform;
                 count++;
@@ -44,6 +47,8 @@ public class PlayerController : MonoBehaviour
         }
 
         lineRenderer = GetComponent<LineRenderer>();
+
+        trailScript = transform.FindChild("Trail").GetComponent<Trail>();
     }
 
     // Update is called once per frame
@@ -78,10 +83,10 @@ public class PlayerController : MonoBehaviour
     {
 
         var possiblePlanets = (from p in planets
-                                     let dist = Vector3.Distance(p.position, transform.position)
-                                     where dist < maximal_grapple_distance
-                                     orderby dist
-                                     select p).ToArray();
+                               let dist = Vector3.Distance(p.position, transform.position)
+                               where dist < maximal_grapple_distance
+                               orderby dist
+                               select p).ToArray();
 
         Transform result = null;
 
@@ -123,7 +128,7 @@ public class PlayerController : MonoBehaviour
         }
 
         return result;
-        
+
     }
 
     float GetAngle(Transform planet)
@@ -220,10 +225,13 @@ public class PlayerController : MonoBehaviour
         velocity = Vector3.up * velocity.magnitude;
         Camera.main.transform.position = Vector3.zero;
 
+        trailScript.Reset();
+
         StartCoroutine(ShowTrail(tr, time));
     }
 
-    IEnumerator ShowTrail(TrailRenderer tr, float time) {
+    IEnumerator ShowTrail(TrailRenderer tr, float time)
+    {
         yield return 0;
         tr.time = time;
     }
