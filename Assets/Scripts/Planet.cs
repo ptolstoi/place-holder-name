@@ -12,6 +12,9 @@ public class Planet : MonoBehaviour
     public AnimationCurve WobbleAnimation;
 
     public float TransitionDuration = 1;
+    public float MaxWobbleTime = 1;
+    [Range(0,1)]
+    public float wobbleAmount = 0.75f;
 
     public GameObject[] Decorations;
     private Transform DecorationRoot;
@@ -25,6 +28,8 @@ public class Planet : MonoBehaviour
     public Player Owner { get; protected set; }
 
     protected PlayerController GrappledPlayer { get; set; }
+    protected PlayerController lastGrappledPlayer;
+    protected float wobbleTime;
 
     public void ChangeOwner(Player newOwner)
     {
@@ -38,40 +43,11 @@ public class Planet : MonoBehaviour
     public void Grapple(PlayerController player)
     {
         GrappledPlayer = player;
-        StartCoroutine(GrappleByPlayer());
-        GrappledPlayer = player;
     }
 
     public void ReleaseGrapple(PlayerController player)
     {
         GrappledPlayer = null;
-    }
-
-    private IEnumerator GrappleByPlayer()
-    {
-        var lastGrappler = GrappledPlayer;
-        while (GrappledPlayer != null)
-        {
-            var targetRotation = Quaternion.FromToRotation(Vector3.back, (GrappledPlayer.transform.position - transform.position));
-            targetRotation = Quaternion.Slerp(targetRotation, Quaternion.identity, 0.5f);
-            transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime*20);
-            yield return 0;
-        }
-
-        var startRotation = transform.localRotation;
-        var targetWobbleRotation = Quaternion.FromToRotation(Vector3.back,
-            (transform.position - lastGrappler.transform.position).normalized);
-        targetWobbleRotation = Quaternion.Slerp(targetWobbleRotation, Quaternion.identity, 0.5f);
-        var time = 0f;
-        var maxTime = 0.6f;
-
-        while (GrappledPlayer == null)
-        {
-            transform.localRotation = Quaternion.Slerp(startRotation, targetWobbleRotation,
-                WobbleAnimation.Evaluate(time / maxTime));
-            yield return 0;
-            time += Time.deltaTime;
-        }
     }
 
     void Start()
@@ -166,12 +142,35 @@ public class Planet : MonoBehaviour
                 ++i;
             }
         }
+
+        if (GrappledPlayer != null)
+        {
+            var targetRotation = Quaternion.FromToRotation(Vector3.back, (GrappledPlayer.transform.position - transform.position));
+            targetRotation = Quaternion.Slerp(targetRotation, Quaternion.identity, 1 - wobbleAmount);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime * 20);
+            wobbleTime = 0;
+            lastGrappledPlayer = GrappledPlayer;
+        }
+
+        if (GrappledPlayer == null && lastGrappledPlayer != null)
+        {
+            var startRotation = Quaternion.FromToRotation(Vector3.back,
+                (lastGrappledPlayer.transform.position - transform.position).normalized);
+            startRotation = Quaternion.Slerp(startRotation, Quaternion.identity, 1 - wobbleAmount);
+
+            var targetWobbleRotation = Quaternion.FromToRotation(Vector3.back,
+                (transform.position - lastGrappledPlayer.transform.position).normalized);
+            targetWobbleRotation = Quaternion.Slerp(targetWobbleRotation, Quaternion.identity, 1 - wobbleAmount);
+        
+            transform.localRotation = Quaternion.Slerp(startRotation, targetWobbleRotation,
+                WobbleAnimation.Evaluate(wobbleTime / MaxWobbleTime));
+             wobbleTime += Time.deltaTime;
+        }
     }
 
     void ChangeColor(Color newColor, float duration)
     {
-        StopCoroutine("ChangeColorCoroutine");
-        StopCoroutine("PulsateColor");
+        StopAllCoroutines();
         StartCoroutine(PulsateColor(newColor, 0.6f));
     }
 
