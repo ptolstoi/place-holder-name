@@ -2,13 +2,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 public class Trail : MonoBehaviour
 {
     public float height = 2.0f;
     public float time = 2.0f;
     public float minDistance = 0.1f;
-    public int filterWindowSize = 10;
+    public int filterWindowSize = 5;
 
     private List<TrailSection> sections = new List<TrailSection>();
 
@@ -109,7 +110,7 @@ public class Trail : MonoBehaviour
                 vertices[i * 2 + 0] = localSpaceTransform.MultiplyPoint(smoothPosition + smoothBitangent * (height / 2f));
                 vertices[i * 2 + 1] = localSpaceTransform.MultiplyPoint(smoothPosition - smoothBitangent * (height / 2f));
 
-                u = i > 0 ? Mathf.Clamp01((Time.time - currentSection.Time) / time) : 1.0f;
+                u = i > 0 ? (sections.Count - i) / (float)sections.Count : 1.0f;
                 uv[i * 2 + 0] = new Vector2(u, 0);
                 uv[i * 2 + 1] = new Vector2(u, 1);
 

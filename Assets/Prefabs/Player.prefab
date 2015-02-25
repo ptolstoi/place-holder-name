@@ -159,7 +159,7 @@ MonoBehaviour:
   height: 1.5
   time: 2
   minDistance: .100000001
-  filterWindowSize: 10
+  filterWindowSize: 5
 --- !u!114 &11408112
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -172,9 +172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ColorTexture: {fileID: 2800000, guid: a727c66161a0ad840b86f78625cbc1e9, type: 3}
-  LightTexture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
   Color: {r: 1, g: 0, b: 0, a: 1}
-  Speed: {x: -2, y: 0}
+  ColorVelocity: {x: 0, y: 2}
 --- !u!114 &11438432
 MonoBehaviour:
   m_ObjectHideFlags: 1
