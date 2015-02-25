@@ -47,12 +47,12 @@ public class Background : MonoBehaviour {
             createdPlanets++;
         }
 
-	    float borderWidth = 5;
+	    float borderWidth = 50;
         
-        CreateBorder("LeftBorder", new Rect(-borderWidth * 1.5f, -borderWidth * 1.5f, borderWidth, yDimension + borderWidth * 3));
-        CreateBorder("RightBorder", new Rect(xDimension + borderWidth / 2, -borderWidth * 1.5f, borderWidth, yDimension + borderWidth * 3));
-        CreateBorder("BottomBorder", new Rect(-borderWidth * 1.5f, -borderWidth * 1.5f, yDimension + borderWidth * 3, borderWidth));
-        CreateBorder("TopBorder", new Rect(-borderWidth * 1.5f, yDimension + borderWidth / 2, yDimension +borderWidth * 3, borderWidth));
+        CreateBorder("LeftBorder", new Rect(-borderWidth, -borderWidth, borderWidth, yDimension + borderWidth * 2));
+        CreateBorder("RightBorder", new Rect(xDimension, -borderWidth, borderWidth, yDimension + borderWidth * 2));
+        CreateBorder("BottomBorder", new Rect(-borderWidth, -borderWidth, xDimension + borderWidth * 2, borderWidth));
+        CreateBorder("TopBorder", new Rect(-borderWidth, yDimension, xDimension + borderWidth * 2, borderWidth));
 	}
 
     private BoxCollider2D CreateBorder(string name, Rect rect)
@@ -61,8 +61,19 @@ public class Background : MonoBehaviour {
         border.transform.SetParent(transform);
         border.layer = LayerMask.NameToLayer("Border");
         border.transform.position = rect.center;
+
         var collider = border.GetComponent<BoxCollider2D>();
-        collider.size = rect.size;
+        collider.size = new Vector2(1, 1);
+
+        var sr = border.AddComponent<SpriteRenderer>();
+        var texture = new Texture2D(1, 1);
+        texture.SetPixel(0,0, Color.white);
+        texture.Apply();
+        sr.sprite = Sprite.Create(texture, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 1);
+
+        border.transform.localScale = rect.size;
+
+
         return collider;
     }
 

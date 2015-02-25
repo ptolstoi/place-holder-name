@@ -233,7 +233,7 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
-        transform.position = Vector3.zero;
+        transform.position = new Vector3(1,1);
         transform.rotation = Quaternion.identity;
         isInOrbit = false;
         grappleTarget = null;
