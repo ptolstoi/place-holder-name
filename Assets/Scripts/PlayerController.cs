@@ -27,6 +27,10 @@ public class PlayerController : MonoBehaviour
     private Trail trail;
     private LineRenderer lineRenderer;
 
+    private Vector3 startVelocity;
+    private Vector3 startPosition;
+    private Quaternion startRotation;
+
     // Use this for initialization
     void Start()
     {
@@ -57,6 +61,10 @@ public class PlayerController : MonoBehaviour
         trail = GetComponentInChildren<Trail>();
 
         PlayerSprite.color = Player.GetColor();
+
+        startVelocity = velocity;
+        startPosition = transform.position;
+        startRotation = transform.rotation;
     }
 
     // Update is called once per frame
@@ -252,11 +260,12 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
-        transform.position = new Vector3(1,1);
-        transform.rotation = Quaternion.identity;
+        transform.position = startPosition;
+        transform.rotation = startRotation;
+        velocity = startVelocity;
+
         isInOrbit = false;
         grappledPlanet = null;
-        velocity = Vector3.up * velocity.magnitude;
 
         trail.Reset();
     }
