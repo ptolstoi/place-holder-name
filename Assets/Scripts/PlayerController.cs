@@ -203,7 +203,7 @@ public class PlayerController : MonoBehaviour
         distance = Vector3.Distance(transform.position, grappledPlanet.transform.position);
         clockwise = GetAngle(grappledPlanet.transform) < 0;
         lastDistance = float.MaxValue;
-        grappledPlanet.ChangeOwner(Player);
+        background.ChangeOwner(grappledPlanet, Player);
         grappledPlanet.Grapple(this);
     }
 

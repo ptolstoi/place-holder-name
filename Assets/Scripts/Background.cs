@@ -17,8 +17,12 @@ public class Background : MonoBehaviour {
     private int maxTries = 10;
     public int createdPlanets = 0;
 
+    private Dictionary<Player, int> ownership; 
+
 	// Use this for initialization
 	void Start () {
+        ownership = new Dictionary<Player, int>();
+
         center = new Vector2(xDimension * 0.5f, yDimension * 0.5f);
         xSafeDimension = new Vector2(center.x - safeZoneSize.x * 0.5f, center.x + safeZoneSize.x * 0.5f);
         ySafeDimension = new Vector2(center.y - safeZoneSize.y * 0.5f, center.y + safeZoneSize.y * 0.5f);
@@ -89,6 +93,13 @@ public class Background : MonoBehaviour {
 
 
         return collider;
+    }
+
+    public void ChangeOwner(Planet planet, Player newOwner)
+    {
+        planet.ChangeOwner(newOwner);
+
+//        planet
     }
 
     private bool CheckDistance(Vector2 pos)

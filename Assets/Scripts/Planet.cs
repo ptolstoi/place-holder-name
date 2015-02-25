@@ -202,7 +202,7 @@ public class Planet : MonoBehaviour
         yield return StartCoroutine(ChangeColorCoroutine(baseColor, duration));
         while (true)
         {
-            var rnd = Random.Range(-0.3f, 0.3f);
+            var rnd = Random.Range(-0.2f, 0.2f);
             Color newColor = (Vector4)baseColor + new Vector4(0, 0, 0, 1) +
                 (Vector4)(Vector3.one * rnd);
 
