@@ -163,7 +163,7 @@ MonoBehaviour:
   xDimension: 50
   yDimension: 50
   minDistance: 5
-  planetCount: 100
+  planetCount: 50
   planetPrefab: {fileID: 169134, guid: 26f5502021ada63469b6ea781f0be13a, type: 2}
   planets: []
   createdPlanets: 0
@@ -625,6 +625,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minDistance: -20
+  offset: 2
 --- !u!1 &2108981169
 GameObject:
   m_ObjectHideFlags: 0
