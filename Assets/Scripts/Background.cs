@@ -11,7 +11,7 @@ public class Background : MonoBehaviour {
     public GameObject planetPrefab;
 
     private List<Vector2> planetPositions = new List<Vector2>();
-    public List<GameObject> planets = new List<GameObject>();
+    public List<Planet> planets = new List<Planet>();
     private int maxTries = 10;
     public int createdPlanets = 0;
 
@@ -43,7 +43,8 @@ public class Background : MonoBehaviour {
         foreach (Vector2 pos in planetPositions)
         {         
             //Instantiate the prefabs
-            planets.Add((GameObject)Instantiate(planetPrefab, new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity));
+            var go = Instantiate(planetPrefab, new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity) as GameObject;
+            planets.Add(go.GetComponent<Planet>());
             createdPlanets++;
         }
 

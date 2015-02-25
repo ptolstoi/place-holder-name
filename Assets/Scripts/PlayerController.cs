@@ -10,13 +10,13 @@ public class PlayerController : MonoBehaviour
     public KeyCode TheOneButton = KeyCode.Space;
     public Player Player = Player.Player1;
 
-    private Transform[] planets;
+    private Planet[] planets;
 
-    private Transform grappleTarget;
+    private Planet grappledPlanet;
+    private Planet previous;
+
     private float distance;
     private bool clockwise;
-
-    private Transform previous;
     float lastDistance;
 
     private bool isInOrbit;
@@ -30,18 +30,20 @@ public class PlayerController : MonoBehaviour
         int planetCount = background.planets.Count;
         if (background && planetCount > 0)
         {
-            planets = new Transform[planetCount];
+            planets = new Planet[planetCount];
             int count = 0;
-            foreach(GameObject p in background.planets)
+            foreach(var p in background.planets)
             {
-                planets[count] = p.transform;
+                planets[count] = p;
                 count++;
             }
         }
         else
         {
             planets = FindObjectsOfType<Transform>().
-                Where(a => a.gameObject.layer == LayerMask.NameToLayer("Planet")).ToArray();
+                Where(a => a.gameObject.layer == LayerMask.NameToLayer("Planet")).
+                Select(a => a.GetComponent<Planet>()).
+                ToArray();
         }
 
         lineRenderer = GetComponent<LineRenderer>();
@@ -51,17 +53,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKey(TheOneButton) && grappleTarget == null)
+        if (Input.GetKey(TheOneButton) && grappledPlanet == null)
         {
             var planet = GetNearestPlanet();
 
             if (planet != null)
             {
-                grappleTarget = planet;
+                grappledPlanet = planet;
                 lastDistance = float.MaxValue;
             }
         }
-        else if (Input.GetKeyUp(TheOneButton) && grappleTarget != null)
+        else if (Input.GetKeyUp(TheOneButton) && grappledPlanet != null)
         {
             ReleaseGrapple();
         }
@@ -72,16 +74,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    Transform GetNearestPlanet()
+    Planet GetNearestPlanet()
     {
 
         var possiblePlanets = (from p in planets
-                                     let dist = Vector3.Distance(p.position, transform.position)
+                                     let dist = Vector3.Distance(p.transform.position, transform.position)
                                      where dist < maximal_grapple_distance
                                      orderby dist
                                      select p).ToArray();
 
-        Transform result = null;
+        Planet result = null;
 
         var position = transform.position + velocity * 0.125f;
         var minimalDistance = float.MaxValue;
@@ -92,7 +94,7 @@ public class PlayerController : MonoBehaviour
             var planet = possiblePlanets[i];
             var planetSize = 0;
 
-            var distanceToPlanet = Vector3.Distance(planet.position, position) - planetSize;
+            var distanceToPlanet = Vector3.Distance(planet.transform.position, position) - planetSize;
 
             if (planet == previous)
             {
@@ -113,7 +115,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Vector3.Distance(position + velocity.normalized * distanceToPlanet, planet.position) > 1 + planetSize)
+            if (Vector3.Distance(position + velocity.normalized * distanceToPlanet, planet.transform.position) > 1 + planetSize)
             {
                 flag = previous == planet;
                 result = planet;
@@ -148,34 +150,34 @@ public class PlayerController : MonoBehaviour
 
 //        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 15 + Vector3.down * 2, Time.deltaTime * 10);
 
-        if (grappleTarget == null || !isInOrbit)
+        if (grappledPlanet == null || !isInOrbit)
         {
             rigidbody2D.MovePosition(transform.position + velocity * Time.fixedDeltaTime);
             lineRenderer.enabled = false;
         }
-        if (grappleTarget != null)
+        if (grappledPlanet != null)
         {
             if (isInOrbit)
             {
-                Debug.DrawLine(transform.position, grappleTarget.position, Color.green);
+                Debug.DrawLine(transform.position, grappledPlanet.transform.position, Color.green);
 
-                var connection = (transform.position - grappleTarget.position).normalized;
+                var connection = (transform.position - grappledPlanet.transform.position).normalized;
                 var angle = Mathf.Atan2(connection.y, connection.x) / Mathf.PI * 180;
 
-                rigidbody2D.MovePosition(grappleTarget.position + connection * distance + velocity.magnitude * transform.up * Time.fixedDeltaTime);
+                rigidbody2D.MovePosition(grappledPlanet.transform.position + connection * distance + velocity.magnitude * transform.up * Time.fixedDeltaTime);
                 rigidbody2D.MoveRotation(angle + (clockwise ? 180 : 0));
             }
             else
             {
-                var distanceToPlanet = Vector3.Distance(transform.position, grappleTarget.position);
+                var distanceToPlanet = Vector3.Distance(transform.position, grappledPlanet.transform.position);
 
                 if (distanceToPlanet > maximal_grapple_distance)
                 {
-                    grappleTarget = null;
+                    grappledPlanet = null;
                 }
                 else
                 {
-                    Debug.DrawLine(transform.position, grappleTarget.position, Color.red);
+                    Debug.DrawLine(transform.position, grappledPlanet.transform.position, Color.red);
 
                     if (lastDistance < distanceToPlanet)
                     {
@@ -185,12 +187,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            lineRenderer.enabled = grappleTarget != null;
+            lineRenderer.enabled = grappledPlanet != null;
 
-            if (grappleTarget != null)
+            if (grappledPlanet != null)
             {
                 lineRenderer.SetPosition(0, transform.position);
-                lineRenderer.SetPosition(1, grappleTarget.position);
+                lineRenderer.SetPosition(1, grappledPlanet.transform.position);
             }
         }
     }
@@ -198,27 +200,23 @@ public class PlayerController : MonoBehaviour
     private void GrappleOnPlanet()
     {
         isInOrbit = true;
-        distance = Vector3.Distance(transform.position, grappleTarget.position);
-        clockwise = GetAngle(grappleTarget) < 0;
+        distance = Vector3.Distance(transform.position, grappledPlanet.transform.position);
+        clockwise = GetAngle(grappledPlanet.transform) < 0;
         lastDistance = float.MaxValue;
-        var planet = grappleTarget.GetComponent<Planet>();
-        if (planet != null)
-        {
-            planet.ChangeOwner(Player);
-            planet.Grapple(this);
-        }
+        grappledPlanet.ChangeOwner(Player);
+        grappledPlanet.Grapple(this);
     }
 
     private void ReleaseGrapple()
     {
-        var planet = grappleTarget.GetComponent<Planet>();
+        var planet = grappledPlanet.GetComponent<Planet>();
         if (planet != null)
         {
             planet.ReleaseGrapple(this);
         }
         velocity = velocity.magnitude * transform.up;
-        previous = grappleTarget;
-        grappleTarget = null;
+        previous = grappledPlanet;
+        grappledPlanet = null;
         isInOrbit = false;
     }
 
@@ -247,7 +245,7 @@ public class PlayerController : MonoBehaviour
         transform.position = new Vector3(1,1);
         transform.rotation = Quaternion.identity;
         isInOrbit = false;
-        grappleTarget = null;
+        grappledPlanet = null;
         velocity = Vector3.up * velocity.magnitude;
         Camera.main.transform.position = Vector3.zero;
 
