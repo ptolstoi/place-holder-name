@@ -223,6 +223,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Border") && !isInOrbit)
+        {
+            Die();
+        }
+    }
+
     void Die()
     {
         transform.position = Vector3.zero;
