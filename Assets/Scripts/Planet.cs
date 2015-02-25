@@ -13,8 +13,10 @@ public class Planet : MonoBehaviour
 
     public float TransitionDuration = 1;
     public float MaxWobbleTime = 1;
-    [Range(0,1)]
+    [Range(0, 1)]
     public float wobbleAmount = 0.75f;
+    [Range(0, 1)]
+    public float dragAmount = 0.75f;
 
     public GameObject[] Decorations;
     private Transform DecorationRoot;
@@ -60,7 +62,7 @@ public class Planet : MonoBehaviour
         GenerateDecorations();
         rotationSpeed = Random.Range(-90, 90) + 180;
 
-        transform.localScale *= 1 + Random.Range(-0.5f, 0.5f);
+        transform.localScale *= 3 + Random.Range(-0.5f, 0.5f);
     }
 
     void GenerateDecorations()
@@ -146,7 +148,7 @@ public class Planet : MonoBehaviour
         if (GrappledPlayer != null)
         {
             var targetRotation = Quaternion.FromToRotation(Vector3.back, (GrappledPlayer.transform.position - transform.position));
-            targetRotation = Quaternion.Slerp(targetRotation, Quaternion.identity, 1 - wobbleAmount);
+            targetRotation = Quaternion.Slerp(targetRotation, Quaternion.identity, 1 - dragAmount);
             transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime * 20);
             wobbleTime = 0;
             lastGrappledPlayer = GrappledPlayer;
@@ -200,7 +202,7 @@ public class Planet : MonoBehaviour
         yield return StartCoroutine(ChangeColorCoroutine(baseColor, duration));
         while (true)
         {
-            var rnd = Random.Range(-0.3f, 0.3f);
+            var rnd = Random.Range(-0.2f, 0.2f);
             Color newColor = (Vector4)baseColor + new Vector4(0, 0, 0, 1) +
                 (Vector4)(Vector3.one * rnd);
 
