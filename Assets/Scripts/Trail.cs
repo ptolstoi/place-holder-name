@@ -21,11 +21,11 @@ public class Trail : MonoBehaviour
     private Vector2 position;
     private TrailSection currentSection;
 
-    private Vector2[] window;
+    private TrailSection[] window;
 
     void Start()
     {
-        window = new Vector2[filterWindowSize];
+        window = new TrailSection[filterWindowSize];
     }
 
     void LateUpdate()
@@ -50,6 +50,7 @@ public class Trail : MonoBehaviour
             sections.Add(section);
         }
 
+        lastIndex = sections.Count - 1;
 
         mesh = GetComponent<MeshFilter>().mesh;
         if (sections.Count > 2)
@@ -71,12 +72,40 @@ public class Trail : MonoBehaviour
 
             Matrix4x4 localSpaceTransform = transform.worldToLocalMatrix;
 
+            for (int i = 0; i < window.Length; i++)
+            {
+                window[i] = sections[lastIndex];
+            }
+
+            TrailSection smoothedSection = new TrailSection();
+
+            float inverseLength = 1.0f / window.Length;
+
             for (int i = sections.Count - 1; i >= 0; i--)
             {
                 currentSection = sections[i];
 
+                for (int j = 1; j < window.Length; j++)
+                {
+                    TrailSection nextSection = window[j];
+
+                    window[j - 1] = window[j];
+                    smoothedSection.Position += nextSection.Position;
+                    smoothedSection.Bitangent += nextSection.Bitangent;
+                }
+
+                int k = window.Length - 1;
+                smoothedSection.Position += currentSection.Position;
+                smoothedSection.Bitangent += currentSection.Bitangent;
+
+                window[window.Length - 1] = currentSection;
+
+                smoothedSection.Position *= inverseLength;
+                smoothedSection.Bitangent *= inverseLength;
+
                 smoothPosition = Vector2.Lerp(currentSection.Position, smoothPosition, smoothingLerp);
-                smoothBitangent = Vector2.Lerp(currentSection.Bitangent, smoothBitangent, smoothingLerp);
+                smoothBitangent = Vector2.Lerp(currentSection.Bitangent, smoothBitangent, smoothingLerp).normalized;
+
 
                 vertices[i * 2 + 0] = localSpaceTransform.MultiplyPoint(smoothPosition + smoothBitangent * (height / 2f));
                 vertices[i * 2 + 1] = localSpaceTransform.MultiplyPoint(smoothPosition - smoothBitangent * (height / 2f));
