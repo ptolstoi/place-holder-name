@@ -285,6 +285,10 @@ Prefab:
       propertyPath: background
       value: 
       objectReference: {fileID: 432622174}
+    - target: {fileID: 11438432, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
+      propertyPath: Player
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
   m_RootGameObject: {fileID: 1193932801}
@@ -368,7 +372,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 432622174}
   TheOneButton: 32
-  Player: 0
+  Player: 1
   velocity: {x: 0, y: 7.5, z: 0}
 --- !u!96 &1193932806
 TrailRenderer:

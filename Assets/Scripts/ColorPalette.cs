@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 public enum Player
 {
@@ -17,12 +15,12 @@ public enum Player
 
 public static class ColorPalette {
     
-    public static Color PlayerColor(int i)
+    public static Color GetColor(int i)
     {
-        return PlayerColor((Player)i);
+        return GetColor((Player)i);
     }
 
-    public static Color PlayerColor(this Player player)
+    public static Color GetColor(this Player player)
     {
         switch (player)
         {

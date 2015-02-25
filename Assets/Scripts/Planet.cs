@@ -25,7 +25,11 @@ public class Planet : MonoBehaviour
 
     public void ChangeOwner(Player newOwner)
     {
-        ChangeColor(newOwner.Color(), TransitionDuration);
+        if (Owner != newOwner)
+        {
+            ChangeColor(newOwner.GetColor(), TransitionDuration);
+            Owner = newOwner;
+        }
     }
 
     void Start()
