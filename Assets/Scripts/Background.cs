@@ -6,6 +6,8 @@ public class Background : MonoBehaviour {
 
     public float xDimension = 10.0f;
     public float yDimension = 10.0f;
+    public Vector2 safeZoneSize = new Vector2(1.0f, 1.0f);
+    private Vector2 center, xSafeDimension, ySafeDimension;
     public float minDistance = 2.0f;
     public int planetCount = 10;
     public GameObject planetPrefab;
@@ -17,7 +19,9 @@ public class Background : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        center = new Vector2(xDimension * 0.5f, yDimension * 0.5f);
+        xSafeDimension = new Vector2(center.x - safeZoneSize.x * 0.5f, center.x + safeZoneSize.x * 0.5f);
+        ySafeDimension = new Vector2(center.y - safeZoneSize.y * 0.5f, center.y + safeZoneSize.y * 0.5f);
         int addedPlanets = 0;
         for(int i = 0; i < planetCount; ++i)
         {
@@ -27,6 +31,11 @@ public class Background : MonoBehaviour {
             while(count < maxTries)
             {
                 if(!CheckDistance(currPos))
+                {
+                    currPos = CalcPosition();
+                    count++;
+                }
+                else if(!CheckPosition(currPos))
                 {
                     currPos = CalcPosition();
                     count++;
@@ -43,7 +52,7 @@ public class Background : MonoBehaviour {
         foreach (Vector2 pos in planetPositions)
         {         
             //Instantiate the prefabs
-            var go = Instantiate(planetPrefab, new Vector3(pos.x, pos.y, 0.0f), Quaternion.identity) as GameObject;
+            var go = Instantiate(planetPrefab, new Vector3(pos.x - xDimension * 0.5f, pos.y - yDimension*0.5f , 0.0f), Quaternion.identity) as GameObject;
             planets.Add(go.GetComponent<Planet>());
             createdPlanets++;
         }
@@ -61,7 +70,11 @@ public class Background : MonoBehaviour {
         var border = new GameObject(name, typeof (BoxCollider2D));
         border.transform.SetParent(transform);
         border.layer = LayerMask.NameToLayer("Border");
-        border.transform.position = rect.center;
+        
+        Vector2 center = rect.center;
+        center.x -= xDimension * 0.5f;
+        center.y -= yDimension * 0.5f;
+        border.transform.position = center;
 
         var collider = border.GetComponent<BoxCollider2D>();
         collider.size = new Vector2(1, 1);
@@ -86,13 +99,13 @@ public class Background : MonoBehaviour {
             if (distance < minDistance)
                 return false;
         }
+        return true;
+    }
 
-        //for(int i = 0; i < index; ++i)
-        //{
-        //    float distance = Vector2.Distance(pos, planetPositions[i]);
-        //    if (distance < minDistance)
-        //        return false;
-        //}
+    private bool CheckPosition(Vector2 pos)
+    {
+        if (pos.x > xSafeDimension.x && pos.x < xSafeDimension.y && pos.y > ySafeDimension.x && pos.y < ySafeDimension.y)
+            return false;
         return true;
     }
 
