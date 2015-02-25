@@ -8,7 +8,8 @@ public class Planet : MonoBehaviour
 
     public Transform OuterPlanet;
     public Transform InnerPlanet;
-    public AnimationCurve Animation;
+    public AnimationCurve PlayerChangeAnimation;
+    public AnimationCurve WobbleAnimation;
 
     public float TransitionDuration = 1;
 
@@ -23,12 +24,53 @@ public class Planet : MonoBehaviour
 
     public Player Owner { get; protected set; }
 
+    protected PlayerController GrappledPlayer { get; set; }
+
     public void ChangeOwner(Player newOwner)
     {
         if (Owner != newOwner)
         {
             ChangeColor(newOwner.GetColor(), TransitionDuration);
             Owner = newOwner;
+        }
+    }
+
+    public void Grapple(PlayerController player)
+    {
+        GrappledPlayer = player;
+        StartCoroutine(GrappleByPlayer());
+        GrappledPlayer = player;
+    }
+
+    public void ReleaseGrapple(PlayerController player)
+    {
+        GrappledPlayer = null;
+    }
+
+    private IEnumerator GrappleByPlayer()
+    {
+        var lastGrappler = GrappledPlayer;
+        while (GrappledPlayer != null)
+        {
+            var targetRotation = Quaternion.FromToRotation(Vector3.back, (GrappledPlayer.transform.position - transform.position));
+            targetRotation = Quaternion.Slerp(targetRotation, Quaternion.identity, 0.5f);
+            transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime*20);
+            yield return 0;
+        }
+
+        var startRotation = transform.localRotation;
+        var targetWobbleRotation = Quaternion.FromToRotation(Vector3.back,
+            (transform.position - lastGrappler.transform.position).normalized);
+        targetWobbleRotation = Quaternion.Slerp(targetWobbleRotation, Quaternion.identity, 0.5f);
+        var time = 0f;
+        var maxTime = 0.6f;
+
+        while (GrappledPlayer == null)
+        {
+            transform.localRotation = Quaternion.Slerp(startRotation, targetWobbleRotation,
+                WobbleAnimation.Evaluate(time / maxTime));
+            yield return 0;
+            time += Time.deltaTime;
         }
     }
 
@@ -50,7 +92,7 @@ public class Planet : MonoBehaviour
         var go = new GameObject("DecorationRoot");
         DecorationRoot = go.transform;
         DecorationRoot.SetParent(transform);
-        DecorationRoot.localPosition = Vector3.zero;
+        DecorationRoot.localPosition = OuterPlanet.localPosition;
 
         hasMoons = false;
 
@@ -128,7 +170,8 @@ public class Planet : MonoBehaviour
 
     void ChangeColor(Color newColor, float duration)
     {
-        StopAllCoroutines();
+        StopCoroutine("ChangeColorCoroutine");
+        StopCoroutine("PulsateColor");
         StartCoroutine(PulsateColor(newColor, 0.6f));
     }
 
@@ -144,7 +187,7 @@ public class Planet : MonoBehaviour
             yield return null;
 
             mr.material.color = newColor;
-            InnerPlanet.localScale = Vector3.one*Animation.Evaluate(timePassed/duration) * 2;
+            InnerPlanet.localScale = Vector3.one*PlayerChangeAnimation.Evaluate(timePassed/duration) * 2;
 
             timePassed += Time.deltaTime;
         }

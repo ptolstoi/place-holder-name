@@ -63,10 +63,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetKeyUp(TheOneButton) && grappleTarget != null)
         {
-            velocity = velocity.magnitude * transform.up;
-            previous = grappleTarget;
-            grappleTarget = null;
-            isInOrbit = false;
+            ReleaseGrapple();
         }
 
         if (Input.GetKeyUp(KeyCode.Escape))
@@ -93,7 +90,7 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < possiblePlanets.Length; i++)
         {
             var planet = possiblePlanets[i];
-            var planetSize = ((CircleCollider2D) planet.collider2D).radius * planet.localScale.x / 2;
+            var planetSize = 0;
 
             var distanceToPlanet = Vector3.Distance(planet.position, position) - planetSize;
 
@@ -208,7 +205,21 @@ public class PlayerController : MonoBehaviour
         if (planet != null)
         {
             planet.ChangeOwner(Player);
+            planet.Grapple(this);
         }
+    }
+
+    private void ReleaseGrapple()
+    {
+        var planet = grappleTarget.GetComponent<Planet>();
+        if (planet != null)
+        {
+            planet.ReleaseGrapple(this);
+        }
+        velocity = velocity.magnitude * transform.up;
+        previous = grappleTarget;
+        grappleTarget = null;
+        isInOrbit = false;
     }
 
     void OnTriggerEnter2D(Collider2D other)
