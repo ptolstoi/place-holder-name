@@ -17,12 +17,19 @@ public class TrailMaterialControler : MonoBehaviour
     void Start()
     {
         material = renderer.material;
+        material.SetTexture("_MainTex", ColorTexture);
+        material.SetTexture("_LightTex", LightTexture);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        Vector2 textureOffset = material.GetTextureOffset("MainTex");
+        Vector2 textureOffset = renderer.material.GetTextureOffset("_LightTex");
         textureOffset += Time.deltaTime * Speed;
+        material.SetTextureOffset("_LightTex", textureOffset);
+
+        material.SetColor("_Color", Color);
+
+        renderer.material = material;
     }
 }
