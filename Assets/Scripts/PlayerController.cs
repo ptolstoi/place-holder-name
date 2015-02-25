@@ -213,8 +213,11 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("trigger enter" + LayerMask.LayerToName(other.gameObject.layer));
         if (other.gameObject.layer == LayerMask.NameToLayer("Planet"))
+        {
+            Die();
+        }
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Border") && !isInOrbit)
         {
             Die();
         }
