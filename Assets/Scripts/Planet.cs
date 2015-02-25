@@ -54,6 +54,8 @@ public class Planet : MonoBehaviour
 
     void Start()
     {
+        Owner = Player.PlayerNone;
+        
         foreach (var ring in Decorations)
         {
             ring.SetActive(false);

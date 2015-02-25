@@ -91,7 +91,7 @@ public class MultiplePlayerCamera : MonoBehaviour {
     void CalculateCameraPosition()
     {
         Vector3 center = (minW + maxW) * 0.5f;
-        Debug.Log(center);
+        
         center.z = Camera.main.transform.position.z;
 
         float scale = CalcScaling();

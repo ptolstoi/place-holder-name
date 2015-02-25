@@ -2,7 +2,7 @@
 
 public enum Player
 {
-    PlayerNone,
+    PlayerNone = -1,
     Player1,
     Player2,
     Player3,
@@ -11,9 +11,10 @@ public enum Player
 
 public static class ColorPalette {
     
-    public static Color GetColor(int i)
+    public static Color CalcColor(int i, int maxPlayers = 4)
     {
-        return GetColor((Player)i);
+        const float start = -60;
+        return Utils.ToColor(start + (180.0f/(maxPlayers - 1))*i, 0.5f, 0.9f, 1);
     }
 
     public static Color GetColor(this Player player)
@@ -21,15 +22,13 @@ public static class ColorPalette {
         switch (player)
         {
             case Player.Player1:
-                return Utils.ToColor(240, 0.5f, 0.9f, 1);
+                return CalcColor(0);
             case Player.Player2:
-                return Utils.ToColor(40, 1, 1, 1);
+                return CalcColor(1);
             case Player.Player3:
-                return Utils.ToColor(80, 1, 1, 1);
+                return CalcColor(2);
             case Player.Player4:
-                return Utils.ToColor(-40, 1, 1,1);
-            case Player.PlayerNone:
-                return Color.grey;             
+                return CalcColor(3);           
             default:
                 return Color.magenta;
         }
