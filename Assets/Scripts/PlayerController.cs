@@ -226,7 +226,7 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
-        else if (other.gameObject.layer == LayerMask.NameToLayer("Border") && !isInOrbit)
+        else if (other.gameObject.layer == LayerMask.NameToLayer("Border") && grappledPlanet == null)
         {
             Die();
         }
@@ -234,7 +234,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Border") && !isInOrbit)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Border") && grappledPlanet == null)
         {
             Die();
         }

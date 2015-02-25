@@ -508,6 +508,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
   TransitionDuration: .600000024
+  MaxWobbleTime: 3
+  wobbleAmount: .400000006
+  dragAmount: .75
   Decorations:
   - {fileID: 174024}
   - {fileID: 174026}
