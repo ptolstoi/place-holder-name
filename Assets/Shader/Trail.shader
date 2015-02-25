@@ -1,8 +1,8 @@
 ﻿	Shader "Custom/Trail" {
 		Properties {
 			_Color ("Color", Color) = (1,1,1,1)
-			_MainTex ("Texture", 2D) = "white" {}
-			_LightTex ("Texture", 2D) = "white" {}
+			_MainTex ("Main", 2D) = "white" {}
+			_LightTex ("Light", 2D) = "white" {}
 		}
 				
 		SubShader {
@@ -22,12 +22,14 @@
 			struct appdata_t {
 				float4 vertex : POSITION;
 				float2 texcoord : TEXCOORD0;
+				fixed4 color : COLOR;
 			};
 
 			struct v2f {
 				float4 vertex : SV_POSITION;
 				half2 colorTexcoord : TEXCOORD0;
 				half2 lightTexcoord : TEXCOORD1;
+				fixed4 color : COLOR;
 			};
 
 			sampler2D _MainTex;
@@ -44,6 +46,7 @@
 				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.colorTexcoord = TRANSFORM_TEX(v.texcoord, _MainTex);				
 				o.lightTexcoord = TRANSFORM_TEX(v.texcoord, _LightTex);
+				o.color = v.color;
 				
 				return o;
 			}
@@ -56,6 +59,8 @@
 				fixed4 light = light1 + tex2D (_LightTex, -i.lightTexcoord);
 				
 				color = color * _Color + light;
+				
+				color *= i.color;
 				
 				return color;
 			}
