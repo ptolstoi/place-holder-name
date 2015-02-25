@@ -31,6 +31,10 @@ public class MultiplePlayerCamera : MonoBehaviour {
 
             CalculateCameraPosition();
         }
+        else if (players.Length == 1)
+        {
+            Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, new Vector3(players[0].transform.position.x, players[0].transform.position.y, minDistance), Time.deltaTime * 100);
+        }
 	}
 
     void CalculateBounds()
@@ -86,6 +90,7 @@ public class MultiplePlayerCamera : MonoBehaviour {
     void CalculateCameraPosition()
     {
         Vector3 center = (minW + maxW) * 0.5f;
+        Debug.Log(center);
         center.z = Camera.main.transform.position.z;
 
         float scale = CalcScaling();
