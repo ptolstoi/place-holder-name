@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -8,6 +9,9 @@ public class PointGUI : MonoBehaviour
     public Background Background;
 
     public RectTransform[] Players;
+
+    public Text timeLeft;
+
     private RectTransform rectTransform;
     private float border;
 
@@ -47,5 +51,11 @@ public class PointGUI : MonoBehaviour
             rect.SetLeftTopPosition(-Vector2.right * totalWidth + Vector2.up * rect.GetHeight() * 0.5f);
 	        totalWidth -= rect.GetWidth() + border;
 	    }
+
+	    var time = Mathf.FloorToInt(Background.TimeLeft);
+        var mins = Mathf.FloorToInt(time / 60.0f);
+        var secs = time - mins * 60;
+
+	    timeLeft.text = String.Format("{0:00}:{1:00}", mins, secs);
 	}
 }

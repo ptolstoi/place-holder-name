@@ -26,6 +26,7 @@ public class Planet : MonoBehaviour
     private Vector3[] rotationAxis;
 
     private Material outerPlanetMaterial;
+    private Material ringMaterial;
 
     public Player Owner { get; protected set; }
 
@@ -68,9 +69,13 @@ public class Planet : MonoBehaviour
 
         transform.localScale *= 3 + Random.Range(-0.5f, 0.5f);
 
-        ChangeColor(ColorPalette.CalcColorCold(), 0);
+        var color = ColorPalette.CalcColorCold();
+        ChangeColor(color, 0);
         defaultUp = Quaternion.Euler(40, 0, 0);
         transform.rotation = defaultUp;
+
+        ringMaterial.color = color;
+
     }
 
     void GenerateDecorations()
@@ -87,6 +92,11 @@ public class Planet : MonoBehaviour
         outerPlanetMaterial = new Material(OuterPlanet.GetComponent<MeshRenderer>().material);
         OuterPlanet.GetComponent<MeshRenderer>().material = outerPlanetMaterial;
 
+        ringMaterial = new Material(Decorations[0].GetComponent<MeshRenderer>().material);
+        Decorations[0].GetComponent<MeshRenderer>().material = ringMaterial;
+        Decorations[1].GetComponent<MeshRenderer>().material = ringMaterial;
+        Decorations[2].GetComponent<MeshRenderer>().material = ringMaterial;
+        
         if (rng == 0 || rng == 1 || rng == 2)
         {
             var ring = GenerateDecoration(Decorations[rng]);
@@ -190,18 +200,25 @@ public class Planet : MonoBehaviour
         float timePassed = 0;
 
         var mr = InnerPlanet.GetComponent<MeshRenderer>();
+        var oldColor = ringMaterial.color;
 
         while (timePassed < duration)
         {
             yield return null;
 
             mr.material.color = newColor;
-            InnerPlanet.localScale = Vector3.one * PlayerChangeAnimation.Evaluate(timePassed / duration) * 2;
+            var lrp = PlayerChangeAnimation.Evaluate(timePassed/duration);
+            InnerPlanet.localScale = Vector3.one * lrp * 2;
+
+            var ringColor = newColor.FromColor();
+            ringColor.b += 0.3f;
+            ringMaterial.color = Color.Lerp(oldColor, ringColor.ToColor(), timePassed/duration);
 
             timePassed += Time.deltaTime;
         }
 
         outerPlanetMaterial.color = newColor;
+        
         InnerPlanet.localScale = Vector3.zero;
     }
 
@@ -210,10 +227,9 @@ public class Planet : MonoBehaviour
         yield return StartCoroutine(ChangeColorCoroutine(baseColor, duration));
         while (true)
         {
-            var rnd = Random.Range(-0.2f, 0.2f);
-            Color newColor = (Vector4)baseColor + new Vector4(0, 0, 0, 1) +
-                (Vector4)(Vector3.one * rnd);
-
+            var rnd = baseColor.FromColor();
+            rnd.b += Random.Range(0, 0.4f);
+            Color newColor = rnd.ToColor();
             yield return StartCoroutine(ChangeColorCoroutine(newColor, duration));
         }
     }

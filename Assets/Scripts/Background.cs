@@ -19,10 +19,14 @@ public class Background : MonoBehaviour {
 
     public Dictionary<Player, int> ownership;
 
-    
+    public float GameTime = 2 * 60;
+
+    public float TimeLeft { get; protected set; }
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
+	    TimeLeft = GameTime;
         ownership = new Dictionary<Player, int>();
         foreach(Player i in System.Enum.GetValues(typeof(Player)))
         {
@@ -69,6 +73,11 @@ public class Background : MonoBehaviour {
         CreateBorder("BottomBorder", new Rect(-borderWidth, -borderWidth, radiusDouble + borderWidth * 2, borderWidth));
         CreateBorder("TopBorder", new Rect(-borderWidth, radiusDouble, radiusDouble + borderWidth * 2, borderWidth));
 	}
+
+    void Update()
+    {
+        TimeLeft -= Time.deltaTime;
+    }
 
     private void OnDrawGizmosSelected()
     {

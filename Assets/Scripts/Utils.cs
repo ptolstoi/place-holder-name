@@ -1,19 +1,38 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public static class Utils {
+public struct HSBColor
+{
+    public float h;
+    public float s;
+    public float b;
+    public float a;
+
+    public HSBColor(float hue, float saturation, float brighness, float alpha)
+    {
+        h = hue;
+        s = saturation;
+        b = brighness;
+        a = alpha;
+    }
+}
+
+public static class Utils
+{
 
     public static Color ToColor(float hue, float saturation, float brighness, float alpha)
     {
-        var hsbColor =
-            new
+        return ToColor(
+            new HSBColor
             {
                 h = hue,
                 s = saturation,
                 b = brighness,
                 a = alpha
-            };
+            });
+    }
 
+    public static Color ToColor(this HSBColor hsbColor)
+    {
         float r = hsbColor.b;
         float g = hsbColor.b;
         float b = hsbColor.b;
@@ -70,6 +89,59 @@ public static class Utils {
         }
 
         return new Color(Mathf.Clamp01(r), Mathf.Clamp01(g), Mathf.Clamp01(b), hsbColor.a);
+    }
+
+    public static HSBColor FromColor(this Color color)
+    {
+        HSBColor ret = new HSBColor(0f, 0f, 0f, color.a);
+
+        float r = color.r;
+        float g = color.g;
+        float b = color.b;
+
+        float max = Mathf.Max(r, Mathf.Max(g, b));
+
+        if (max <= 0)
+        {
+            return ret;
+        }
+
+        float min = Mathf.Min(r, Mathf.Min(g, b));
+        float dif = max - min;
+
+        if (max > min)
+        {
+            if (g == max)
+            {
+                ret.h = (b - r) / dif * 60f + 120f;
+            }
+            else if (b == max)
+            {
+                ret.h = (r - g) / dif * 60f + 240f;
+            }
+            else if (b > g)
+            {
+                ret.h = (g - b) / dif * 60f + 360f;
+            }
+            else
+            {
+                ret.h = (g - b) / dif * 60f;
+            }
+            if (ret.h < 0)
+            {
+                ret.h = ret.h + 360f;
+            }
+        }
+        else
+        {
+            ret.h = 0;
+        }
+
+        ret.h *= 1f;
+        ret.s = (dif / max) * 1f;
+        ret.b = max;
+
+        return ret;
     }
 
 }
