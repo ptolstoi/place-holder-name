@@ -9,6 +9,8 @@ public class PlayerController : MonoBehaviour
     public Background background;
     public KeyCode TheOneButton = KeyCode.Space;
     public Player Player = Player.Player1;
+    private bool rotating = true;
+    public float speed = 20.0f;
 
     public SpriteRenderer PlayerSprite;
 
@@ -80,6 +82,8 @@ public class PlayerController : MonoBehaviour
                 grappledPlanet = planet;
                 lastDistance = float.MaxValue;
             }
+
+            rotating = false;
         }
         else if (Input.GetKeyUp(TheOneButton) && grappledPlanet != null)
         {
@@ -90,6 +94,17 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+        if (rotating)
+        {
+            RotateAroundCenter();
+        }
+    }
+
+    private void RotateAroundCenter()
+    {
+        Vector3 pos = transform.position;
+        Vector3 tangent = Vector3.Cross(new Vector3(0.0f, 0.0f, -1.0f), pos);
+        velocity = tangent.normalized * speed;
     }
 
     Planet GetNearestPlanet()
@@ -268,6 +283,8 @@ public class PlayerController : MonoBehaviour
         grappledPlanet = null;
 
         trail.Reset();
+
+        rotating = true;
     }
 
 }

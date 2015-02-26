@@ -136,9 +136,6 @@ public class Background : MonoBehaviour {
 
     private Vector2 CalcPosition()
     {
-        //float x = Random.Range(-halfDimension, halfDimension);
-        //float y = Random.Range(-halfDimension, halfDimension);
-
         float radius = Random.Range(innerRadius, outerRadius);
         float angle = Random.Range(0.0f, 360.0f);
 
