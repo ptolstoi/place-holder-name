@@ -34,6 +34,8 @@ public class PlayerController : MonoBehaviour
     private Vector3 startPosition;
     private Quaternion startRotation;
 
+    private bool Paused;
+
     // Use this for initialization
     void Start()
     {
@@ -68,12 +70,13 @@ public class PlayerController : MonoBehaviour
         startVelocity = velocity;
         startPosition = transform.position;
         startRotation = transform.rotation;
+        Paused = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (Paused) return;
         if (Input.GetKey(TheOneButton) && grappledPlanet == null)
         {
             var planet = GetNearestPlanet();
@@ -91,10 +94,6 @@ public class PlayerController : MonoBehaviour
             ReleaseGrapple();
         }
 
-        if (Input.GetKeyUp(KeyCode.Escape))
-        {
-            Die();
-        }
         if (rotating)
         {
             RotateAroundCenter();
@@ -190,6 +189,10 @@ public class PlayerController : MonoBehaviour
     {
 
 //        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 15 + Vector3.down * 2, Time.deltaTime * 10);
+        if (Paused)
+        {
+            return;
+        }
 
         if (grappledPlanet == null || !isInOrbit)
         {
@@ -295,4 +298,15 @@ public class PlayerController : MonoBehaviour
         rotating = true;
     }
 
+    public void Pause()
+    {
+        Paused = true;
+        trail.Pause();
+    }
+
+    public void UnPause()
+    {
+        Paused = false;
+        trail.UnPause();
+    }
 }

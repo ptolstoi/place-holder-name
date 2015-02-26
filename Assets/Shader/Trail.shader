@@ -6,6 +6,7 @@
 				
 		SubShader {
 	Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+	Cull Off
 	LOD 100
 	
 	ZWrite Off

@@ -23,6 +23,7 @@ public class Trail : MonoBehaviour
     private TrailSection currentSection;
 
     private TrailSection[] window;
+    private bool pause;
 
     void Start()
     {
@@ -33,25 +34,29 @@ public class Trail : MonoBehaviour
     {
         position = transform.position;
 
-        while (sections.Count > 0 && Time.time > sections[0].Time + time)
-        {
-            sections.RemoveAt(0);
-        }
-
-
         int lastIndex = sections.Count - 1;
 
-        if (sections.Count == 0 || (position - sections[lastIndex].Position).sqrMagnitude > minDistance * minDistance)
+        if (!pause)
         {
-            TrailSection section = new TrailSection();
+            while (sections.Count > 0 && Time.time > sections[0].Time + time)
+            {
+                sections.RemoveAt(0);
+            }
 
-            section.Bitangent = transform.right;
-            section.Position = position;
-            section.Time = Time.time;
-            sections.Add(section);
+            lastIndex = sections.Count - 1;
+
+            if (sections.Count == 0 || (position - sections[lastIndex].Position).sqrMagnitude > minDistance*minDistance)
+            {
+                TrailSection section = new TrailSection();
+
+                section.Bitangent = transform.right;
+                section.Position = position;
+                section.Time = Time.time;
+                sections.Add(section);
+            }
+
+            lastIndex = sections.Count - 1;
         }
-
-        lastIndex = sections.Count - 1;
 
         mesh = GetComponent<MeshFilter>().mesh;
         if (sections.Count > 2)
@@ -150,6 +155,16 @@ public class Trail : MonoBehaviour
         public Vector2 Position;
         public Vector2 Bitangent;
         public float Time;
+    }
+
+    public void Pause()
+    {
+        pause = true;
+    }
+
+    public void UnPause()
+    {
+        pause = false;
     }
 
 }

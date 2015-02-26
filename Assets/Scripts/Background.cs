@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Background : MonoBehaviour {
 
@@ -20,12 +21,15 @@ public class Background : MonoBehaviour {
     public Dictionary<Player, int> ownership;
 
     public float GameTime = 2 * 60;
+    private PlayerController[] players;
 
     public float TimeLeft { get; protected set; }
 
 	// Use this for initialization
 	void Start ()
-	{
+    {
+        players = GameObject.FindGameObjectsWithTag("Player").Select(p => p.GetComponent<PlayerController>()).ToArray();
+
 	    TimeLeft = GameTime;
         ownership = new Dictionary<Player, int>();
         foreach(Player i in System.Enum.GetValues(typeof(Player)))
@@ -76,7 +80,20 @@ public class Background : MonoBehaviour {
 
     void Update()
     {
-        TimeLeft -= Time.deltaTime;
+        if (TimeLeft > 0)
+        {
+            TimeLeft -= Time.deltaTime;
+        }
+        else
+        {
+            TimeLeft = 0;
+
+
+            foreach (var player in players)
+            {
+                player.Pause();
+            }
+        }
     }
 
     private void OnDrawGizmosSelected()
