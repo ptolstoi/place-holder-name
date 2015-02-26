@@ -70,6 +70,12 @@ public class Background : MonoBehaviour {
         CreateBorder("TopBorder", new Rect(-borderWidth, radiusDouble, radiusDouble + borderWidth * 2, borderWidth));
 	}
 
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(transform.position, innerRadius);
+        Gizmos.DrawWireSphere(transform.position, outerRadius);
+    }
+
     private BoxCollider2D CreateBorder(string name, Rect rect)
     {
         var border = new GameObject(name, typeof (BoxCollider2D));

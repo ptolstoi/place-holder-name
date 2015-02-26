@@ -193,10 +193,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15d17069318deb245ac7c88a97e98a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  xDimension: 100
-  yDimension: 100
-  safeZoneSize: {x: 1, y: 1}
-  minDistance: 15
+  radius: 50
+  innerRadius: 10
+  outerRadius: 50
+  minDistance: 1
   planetCount: 20
   planetPrefab: {fileID: 169134, guid: 26f5502021ada63469b6ea781f0be13a, type: 2}
   planets: []
