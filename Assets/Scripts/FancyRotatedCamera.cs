@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 public class FancyRotatedCamera : MonoBehaviour
@@ -19,11 +19,37 @@ public class FancyRotatedCamera : MonoBehaviour
 	void Update ()
 	{
 	    var pos = player.Select(pc => new { p = pc.transform.position, v = pc.velocity.normalized });
+        
+        int count = 0;
 
-        var min = new Vector3(pos.Min(p => p.p.x + p.v.x), pos.Min(p => p.p.y + p.v.y));
-        var max = new Vector3(pos.Max(p => p.p.x + p.v.x), pos.Max(p => p.p.y + p.v.y));
+        List<Vector3> validPositions = new List<Vector3>();
+        foreach(var p in pos)
+        {
+            if(!player[count].GetRotating())
+            {
+                validPositions.Add(p.p + p.v);
+            }
+            count++;
+        }
 
-	    var center = (max - min)*0.5f + min;
+        Vector3 min = new Vector3(Mathf.Infinity, Mathf.Infinity);
+        Vector3 max = new Vector3(-Mathf.Infinity, -Mathf.Infinity);
+        foreach (var p in validPositions)
+        {
+            if (p.x < min.x)
+                min.x = p.x;
+            if (p.x > max.x)
+                max.x = p.x;
+
+            if (p.y < min.y)
+                min.y = p.y;
+            if (p.y > max.y)
+                max.y = p.y;
+        }
+        
+        Vector3 center = new Vector3(0.0f, 0.0f, 0.0f);
+        if(validPositions.Count != 0)
+	        center = (max - min)*0.5f + min;
 
 	    Vector2 size = max - min;
 	    size.y *= camera.aspect;
