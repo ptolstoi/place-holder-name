@@ -75,6 +75,8 @@ public class PlayerController : MonoBehaviour
         startPosition = transform.position;
         startRotation = transform.rotation;
         Paused = false;
+
+        RotateAroundCenter();
     }
 
     // Update is called once per frame
@@ -106,18 +108,13 @@ public class PlayerController : MonoBehaviour
             ReleaseGrapple();
             rotating = false;
         }
-
-        if (rotating)
-        {
-            RotateAroundCenter();
-        }
     }
 
     public void UnDie()
     {
         UnPause();
         trail.Reset();
-        rotating = true;
+        RotateAroundCenter();
         foreach (var r in GetComponentsInChildren<Renderer>())
         {
             r.enabled = true;
@@ -131,7 +128,9 @@ public class PlayerController : MonoBehaviour
 
     private void RotateAroundCenter()
     {
+        rotating = true;
         grappledPlanet = planets[0];
+        GrappleOnPlanet();
     }
 
     Planet GetNearestPlanet()
@@ -207,8 +206,6 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-
-//        Camera.main.transform.position = Vector3.Lerp(Camera.main.transform.position, transform.position + Vector3.back * 15 + Vector3.down * 2, Time.deltaTime * 10);
         if (Paused)
         {
             return;
@@ -265,7 +262,7 @@ public class PlayerController : MonoBehaviour
     {
         isInOrbit = true;
         distance = Vector3.Distance(transform.position, grappledPlanet.transform.position);
-        clockwise = GetAngle(grappledPlanet.transform) < 0;
+        clockwise = GetAngle(grappledPlanet.transform) < 0 && !grappledPlanet.Celestial;
         lastDistance = float.MaxValue;
         background.ChangeOwner(grappledPlanet, Player);
         grappledPlanet.Grapple(this);

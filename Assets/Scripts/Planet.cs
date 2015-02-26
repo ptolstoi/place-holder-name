@@ -35,10 +35,11 @@ public class Planet : MonoBehaviour
     protected float wobbleTime;
 
     protected Quaternion defaultUp;
+    public bool Celestial;
 
     public void ChangeOwner(Player newOwner)
     {
-        if (Owner != newOwner)
+        if (Owner != newOwner && !Celestial)
         {
             ChangeColor(newOwner.GetColor(), TransitionDuration);
             Owner = newOwner;
@@ -68,13 +69,21 @@ public class Planet : MonoBehaviour
         rotationSpeed = Random.Range(-90, 90) + 120;
 
         transform.localScale *= 3 + Random.Range(-0.5f, 0.5f);
+        if (Celestial)
+        {
+            transform.localScale = 6 * Vector3.one;
+            ChangeColor(new Color(1, 1, 0.9f), 0.1f);
+        }
 
-        var color = ColorPalette.CalcColorCold();
-        ChangeColor(color, 0);
-        defaultUp = Quaternion.Euler(40, 0, 0);
-        transform.rotation = defaultUp;
+        if (!Celestial)
+        {
+            var color = ColorPalette.CalcColorCold();
+            ChangeColor(color, 0);
+            defaultUp = Quaternion.Euler(40, 0, 0);
+            transform.rotation = defaultUp;
 
-        ringMaterial.color = color;
+            ringMaterial.color = color;
+        }
 
     }
 
@@ -93,14 +102,19 @@ public class Planet : MonoBehaviour
         OuterPlanet.GetComponent<MeshRenderer>().material = outerPlanetMaterial;
 
         ringMaterial = new Material(Decorations[0].GetComponent<MeshRenderer>().material);
-        Decorations[0].GetComponent<MeshRenderer>().material = ringMaterial;
+        Decorations[0].GetComponent<MeshRenderer    >().material = ringMaterial;
         Decorations[1].GetComponent<MeshRenderer>().material = ringMaterial;
         Decorations[2].GetComponent<MeshRenderer>().material = ringMaterial;
-        
+
+        if (Celestial)
+        {
+            return;
+        }
+
         if (rng == 0 || rng == 1 || rng == 2)
         {
             var ring = GenerateDecoration(Decorations[rng]);
-//            ring.Rotate(Vector3.right, 20f);
+            //            ring.Rotate(Vector3.right, 20f);
 
             if (rng == 2)
             {
@@ -149,6 +163,11 @@ public class Planet : MonoBehaviour
 
     void Update()
     {
+        if (Celestial)
+        {
+            return;
+        }
+
         if (!hasMoons)
         {
             DecorationRoot.transform.Rotate(Vector3.back, rotationSpeed * Time.deltaTime);
@@ -200,25 +219,28 @@ public class Planet : MonoBehaviour
         float timePassed = 0;
 
         var mr = InnerPlanet.GetComponent<MeshRenderer>();
-        var oldColor = ringMaterial.color;
+        var oldColor = !Celestial ? ringMaterial.color : Color.clear;
 
         while (timePassed < duration)
         {
             yield return null;
 
             mr.material.color = newColor;
-            var lrp = PlayerChangeAnimation.Evaluate(timePassed/duration);
+            var lrp = PlayerChangeAnimation.Evaluate(timePassed / duration);
             InnerPlanet.localScale = Vector3.one * lrp * 2;
 
-            var ringColor = newColor.FromColor();
-            ringColor.b += 0.3f;
-            ringMaterial.color = Color.Lerp(oldColor, ringColor.ToColor(), timePassed/duration);
+            if (!Celestial)
+            {
+                var ringColor = newColor.FromColor();
+                ringColor.b += 0.3f;
+                ringMaterial.color = Color.Lerp(oldColor, ringColor.ToColor(), timePassed/duration);
+            }
 
             timePassed += Time.deltaTime;
         }
 
         outerPlanetMaterial.color = newColor;
-        
+
         InnerPlanet.localScale = Vector3.zero;
     }
 

@@ -63,6 +63,7 @@ public class Background : MonoBehaviour {
 
         var centralPlanet = Instantiate(planetPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity) as GameObject;
         Planet central = centralPlanet.GetComponent<Planet>();
+	    central.Celestial = true;
         central.SetCentralPlanet();
         planets.Add(central);
         foreach (Vector2 pos in planetPositions)
@@ -134,6 +135,7 @@ public class Background : MonoBehaviour {
 
     public void ChangeOwner(Planet planet, Player newOwner)
     {
+        if (planet.Celestial) return;
         var previousOwner = planet.Owner;
         if (previousOwner != Player.PlayerNone)
         {
