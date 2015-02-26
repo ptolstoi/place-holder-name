@@ -33,6 +33,8 @@ public class Planet : MonoBehaviour
     protected PlayerController lastGrappledPlayer;
     protected float wobbleTime;
 
+    protected Quaternion defaultUp;
+
     public void ChangeOwner(Player newOwner)
     {
         if (Owner != newOwner)
@@ -55,18 +57,20 @@ public class Planet : MonoBehaviour
     void Start()
     {
         Owner = Player.PlayerNone;
-        
+
         foreach (var ring in Decorations)
         {
             ring.SetActive(false);
         }
 
         GenerateDecorations();
-        rotationSpeed = Random.Range(-90, 90) + 180;
+        rotationSpeed = Random.Range(-90, 90) + 120;
 
         transform.localScale *= 3 + Random.Range(-0.5f, 0.5f);
 
         ChangeColor(ColorPalette.CalcColorCold(), 0);
+        defaultUp = Quaternion.Euler(40, 0, 0);
+        transform.rotation = defaultUp;
     }
 
     void GenerateDecorations()
@@ -86,7 +90,7 @@ public class Planet : MonoBehaviour
         if (rng == 0 || rng == 1 || rng == 2)
         {
             var ring = GenerateDecoration(Decorations[rng]);
-            ring.Rotate(Vector3.right, Random.Range(-20f, 20f));
+//            ring.Rotate(Vector3.right, 20f);
 
             if (rng == 2)
             {
@@ -124,7 +128,7 @@ public class Planet : MonoBehaviour
     Transform GenerateDecoration(GameObject go, bool clone = false)
     {
         var ring = clone ? Instantiate(go) as GameObject : go;
-        
+
         ring.transform.SetParent(DecorationRoot.transform);
         ring.transform.localPosition = Vector3.zero;
         ring.transform.rotation = Quaternion.Euler(0, 0, Random.Range(0f, 360f));
@@ -137,14 +141,14 @@ public class Planet : MonoBehaviour
     {
         if (!hasMoons)
         {
-            DecorationRoot.transform.Rotate(Vector3.back, rotationSpeed*Time.deltaTime);
+            DecorationRoot.transform.Rotate(Vector3.back, rotationSpeed * Time.deltaTime);
         }
         else
         {
             var i = 0;
             foreach (Transform decoration in DecorationRoot)
             {
-                decoration.transform.Rotate(rotationAxis[i], rotationSpeed*Time.deltaTime);
+                decoration.transform.Rotate(rotationAxis[i], rotationSpeed * Time.deltaTime);
                 ++i;
             }
         }
@@ -152,7 +156,7 @@ public class Planet : MonoBehaviour
         if (GrappledPlayer != null)
         {
             var targetRotation = Quaternion.FromToRotation(Vector3.back, (GrappledPlayer.transform.position - transform.position));
-            targetRotation = Quaternion.Slerp(targetRotation, Quaternion.identity, 1 - dragAmount);
+            targetRotation = Quaternion.Slerp(targetRotation, defaultUp, 1 - dragAmount);
             transform.localRotation = Quaternion.Slerp(transform.localRotation, targetRotation, Time.deltaTime * 20);
             wobbleTime = 0;
             lastGrappledPlayer = GrappledPlayer;
@@ -162,15 +166,15 @@ public class Planet : MonoBehaviour
         {
             var startRotation = Quaternion.FromToRotation(Vector3.back,
                 (lastGrappledPlayer.transform.position - transform.position).normalized);
-            startRotation = Quaternion.Slerp(startRotation, Quaternion.identity, 1 - wobbleAmount);
+            startRotation = Quaternion.Slerp(startRotation, defaultUp, 1 - wobbleAmount);
 
             var targetWobbleRotation = Quaternion.FromToRotation(Vector3.back,
                 (transform.position - lastGrappledPlayer.transform.position).normalized);
-            targetWobbleRotation = Quaternion.Slerp(targetWobbleRotation, Quaternion.identity, 1 - wobbleAmount);
-        
+            targetWobbleRotation = Quaternion.Slerp(targetWobbleRotation, defaultUp, 1 - wobbleAmount);
+
             transform.localRotation = Quaternion.Slerp(startRotation, targetWobbleRotation,
                 WobbleAnimation.Evaluate(wobbleTime / MaxWobbleTime));
-             wobbleTime += Time.deltaTime;
+            wobbleTime += Time.deltaTime;
         }
     }
 
@@ -192,7 +196,7 @@ public class Planet : MonoBehaviour
             yield return null;
 
             mr.material.color = newColor;
-            InnerPlanet.localScale = Vector3.one*PlayerChangeAnimation.Evaluate(timePassed/duration) * 2;
+            InnerPlanet.localScale = Vector3.one * PlayerChangeAnimation.Evaluate(timePassed / duration) * 2;
 
             timePassed += Time.deltaTime;
         }
