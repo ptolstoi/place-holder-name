@@ -76,11 +76,11 @@ public class Background : MonoBehaviour {
 
 	    float borderWidth = 50;
 
-        float radiusDouble = radius * 2.0f;
-        CreateBorder("LeftBorder", new Rect(-borderWidth, -borderWidth, borderWidth, radiusDouble + borderWidth * 2));
-        CreateBorder("RightBorder", new Rect(radiusDouble, -borderWidth, borderWidth, radiusDouble + borderWidth * 2));
-        CreateBorder("BottomBorder", new Rect(-borderWidth, -borderWidth, radiusDouble + borderWidth * 2, borderWidth));
-        CreateBorder("TopBorder", new Rect(-borderWidth, radiusDouble, radiusDouble + borderWidth * 2, borderWidth));
+//        float radiusDouble = radius * 2.0f;
+//        CreateBorder("LeftBorder", new Rect(-borderWidth, -borderWidth, borderWidth, radiusDouble + borderWidth * 2));
+//        CreateBorder("RightBorder", new Rect(radiusDouble, -borderWidth, borderWidth, radiusDouble + borderWidth * 2));
+//        CreateBorder("BottomBorder", new Rect(-borderWidth, -borderWidth, radiusDouble + borderWidth * 2, borderWidth));
+//        CreateBorder("TopBorder", new Rect(-borderWidth, radiusDouble, radiusDouble + borderWidth * 2, borderWidth));
 	}
 
     void Update()

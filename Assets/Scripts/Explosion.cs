@@ -53,9 +53,9 @@ public class Explosion : MonoBehaviour
         {
             for (int i = 0; i < ps.Length; i++)
             {
-                ps[i].velocity = new Vector3(ps[i].velocity.x, ps[i].velocity.y) + 
-                    (Player.transform.position - ps[i].position).normalized * Time.deltaTime;
-//                ps[i].velocity = Vector3.Lerp(ps[i].velocity, Vector3.zero, Time.deltaTime);
+//                ps[i].velocity = new Vector3(ps[i].velocity.x, ps[i].velocity.y) + 
+//                    (Player.transform.position - ps[i].position).normalized * Time.deltaTime * 3;
+                ps[i].velocity = Vector3.Lerp(ps[i].velocity, Vector3.zero, Time.deltaTime);
 //                ps[i].position = new Vector3(ps[i].position.x, ps[i].position.y);
                 ps[i].lifetime = 1;
             }

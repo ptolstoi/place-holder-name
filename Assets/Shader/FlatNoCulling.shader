@@ -7,6 +7,9 @@
 		Pass {
 			Tags { "RenderType"="Opaque" }
 			Cull Off
+			
+	ZWrite On
+	ZTest Always
 			LOD 200
 		
 			CGPROGRAM

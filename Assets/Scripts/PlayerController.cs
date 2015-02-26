@@ -82,6 +82,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Shader.SetGlobalVector("_MorphParams" + (int)Player, 
+            new Vector4(transform.position.x, transform.position.y, 1, 1));
+
         deathTimer = Mathf.Max(-1, deathTimer - Time.deltaTime);
         if (deathTimer < 0 && deathTimer + Time.deltaTime > 0)
         {
@@ -130,7 +133,7 @@ public class PlayerController : MonoBehaviour
     {
         rotating = true;
         grappledPlanet = planets[0];
-        GrappleOnPlanet();
+        GrappleOnPlanet(true);
     }
 
     Planet GetNearestPlanet()
@@ -256,13 +259,18 @@ public class PlayerController : MonoBehaviour
                 lineRenderer.SetPosition(1, grappledPlanet.OuterPlanet.position);
             }
         }
+
+        if (transform.position.magnitude > background.outerRadius && grappledPlanet == null)
+        {
+            Die();
+        }
     }
 
-    private void GrappleOnPlanet()
+    private void GrappleOnPlanet(bool force = false)
     {
         isInOrbit = true;
         distance = Vector3.Distance(transform.position, grappledPlanet.transform.position);
-        clockwise = GetAngle(grappledPlanet.transform) < 0 && !grappledPlanet.Celestial;
+        clockwise = GetAngle(grappledPlanet.transform) < 0 && !force;
         lastDistance = float.MaxValue;
         background.ChangeOwner(grappledPlanet, Player);
         grappledPlanet.Grapple(this);
@@ -294,7 +302,7 @@ public class PlayerController : MonoBehaviour
         else if (other.gameObject.tag == "Player" && !rotating)
         {
             var pc = other.GetComponent<PlayerController>();
-            if (!pc.rotating)
+            if (!pc.rotating && deathTimer < 0)
             {
                 Die();
                 pc.Die();
