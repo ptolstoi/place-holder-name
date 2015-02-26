@@ -194,13 +194,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 50
-  innerRadius: 10
+  innerRadius: 15
   outerRadius: 50
-  minDistance: 1
+  minDistance: 5
   planetCount: 20
   planetPrefab: {fileID: 169134, guid: 26f5502021ada63469b6ea781f0be13a, type: 2}
   planets: []
   createdPlanets: 0
+  GameTime: 120
 --- !u!4 &432622175
 Transform:
   m_ObjectHideFlags: 0
@@ -718,7 +719,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.z
@@ -916,6 +917,7 @@ MonoBehaviour:
   - {fileID: 2029806963}
   - {fileID: 974815398}
   - {fileID: 1082000656}
+  timeLeft: {fileID: 464404152}
 --- !u!1 &974815397
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,11 +988,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -1
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1119,7 +1121,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.y
@@ -1281,7 +1283,7 @@ Transform:
   m_PrefabInternal: {fileID: 1093708304}
   m_GameObject: {fileID: 1193932801}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 560796168}
@@ -1303,7 +1305,6 @@ MonoBehaviour:
   background: {fileID: 432622174}
   TheOneButton: 97
   Player: 0
-  speed: 20
   PlayerSprite: {fileID: 560796165}
   velocity: {x: 0, y: 25, z: 0}
 --- !u!58 &1193932807
@@ -1377,11 +1378,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -1
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 438434, guid: 43d57d4daec3c1048b0d1218a3068e97, type: 2}
       propertyPath: m_LocalPosition.z
@@ -1505,7 +1506,7 @@ Transform:
   m_PrefabInternal: {fileID: 1053113776}
   m_GameObject: {fileID: 1435556724}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: -4.37113883e-08}
-  m_LocalPosition: {x: 1, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: -3, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 443638253}
@@ -1589,7 +1590,6 @@ MonoBehaviour:
   background: {fileID: 432622174}
   TheOneButton: 102
   Player: 1
-  speed: 20
   PlayerSprite: {fileID: 443638252}
   velocity: {x: 0, y: -25, z: 0}
 --- !u!1 &1546403138
@@ -1618,7 +1618,7 @@ Transform:
   m_PrefabInternal: {fileID: 1254482065}
   m_GameObject: {fileID: 1546403138}
   m_LocalRotation: {x: 0, y: 0, z: -.707106829, w: -.707106829}
-  m_LocalPosition: {x: -1, y: 1, z: 0}
+  m_LocalPosition: {x: -3, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 489853181}
@@ -1702,7 +1702,6 @@ MonoBehaviour:
   background: {fileID: 432622174}
   TheOneButton: 13
   Player: 3
-  speed: 20
   PlayerSprite: {fileID: 489853180}
   velocity: {x: -25, y: 0, z: 0}
 --- !u!1 &1599071702
@@ -1801,7 +1800,6 @@ MonoBehaviour:
   background: {fileID: 432622174}
   TheOneButton: 106
   Player: 2
-  speed: 20
   PlayerSprite: {fileID: 1304654633}
   velocity: {x: 25, y: 0, z: 0}
 --- !u!4 &1599071707
@@ -1811,7 +1809,7 @@ Transform:
   m_PrefabInternal: {fileID: 672069485}
   m_GameObject: {fileID: 1599071702}
   m_LocalRotation: {x: 0, y: 0, z: -.707106829, w: .707106829}
-  m_LocalPosition: {x: 3, y: 1, z: 0}
+  m_LocalPosition: {x: 3, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_Children:
   - {fileID: 1304654634}
