@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class Background : MonoBehaviour {
 
-    public float xDimension = 10.0f;
-    public float yDimension = 10.0f;
-    public Vector2 safeZoneSize = new Vector2(1.0f, 1.0f);
-    private Vector2 center, xSafeDimension, ySafeDimension;
+    public float radius = 10.0f;
+    public float innerRadius = 2.0f;
+    public float outerRadius = 10.0f;
+
     public float minDistance = 2.0f;
     public int planetCount = 10;
     public GameObject planetPrefab;
@@ -17,7 +17,9 @@ public class Background : MonoBehaviour {
     private int maxTries = 10;
     public int createdPlanets = 0;
 
-    public Dictionary<Player, int> ownership; 
+    public Dictionary<Player, int> ownership;
+
+    
 
 	// Use this for initialization
 	void Start () {
@@ -28,10 +30,8 @@ public class Background : MonoBehaviour {
 	        ownership[i] = 0;
 	    }
 
-        center = new Vector2(xDimension * 0.5f, yDimension * 0.5f);
-        xSafeDimension = new Vector2(center.x - safeZoneSize.x * 0.5f, center.x + safeZoneSize.x * 0.5f);
-        ySafeDimension = new Vector2(center.y - safeZoneSize.y * 0.5f, center.y + safeZoneSize.y * 0.5f);
         int addedPlanets = 0;
+
         for(int i = 0; i < planetCount; ++i)
         {
             int count = 0;
@@ -40,11 +40,6 @@ public class Background : MonoBehaviour {
             while(count < maxTries)
             {
                 if(!CheckDistance(currPos))
-                {
-                    currPos = CalcPosition();
-                    count++;
-                }
-                else if(!CheckPosition(currPos))
                 {
                     currPos = CalcPosition();
                     count++;
@@ -61,17 +56,18 @@ public class Background : MonoBehaviour {
         foreach (Vector2 pos in planetPositions)
         {         
             //Instantiate the prefabs
-            var go = Instantiate(planetPrefab, new Vector3(pos.x - xDimension * 0.5f, pos.y - yDimension*0.5f , 0.0f), Quaternion.identity) as GameObject;
+            var go = Instantiate(planetPrefab, new Vector3(pos.x, pos.y , 0.0f), Quaternion.identity) as GameObject;
             planets.Add(go.GetComponent<Planet>());
             createdPlanets++;
         }
 
 	    float borderWidth = 50;
-        
-        CreateBorder("LeftBorder", new Rect(-borderWidth, -borderWidth, borderWidth, yDimension + borderWidth * 2));
-        CreateBorder("RightBorder", new Rect(xDimension, -borderWidth, borderWidth, yDimension + borderWidth * 2));
-        CreateBorder("BottomBorder", new Rect(-borderWidth, -borderWidth, xDimension + borderWidth * 2, borderWidth));
-        CreateBorder("TopBorder", new Rect(-borderWidth, yDimension, xDimension + borderWidth * 2, borderWidth));
+
+        float radiusDouble = radius * 2.0f;
+        CreateBorder("LeftBorder", new Rect(-borderWidth, -borderWidth, borderWidth, radiusDouble + borderWidth * 2));
+        CreateBorder("RightBorder", new Rect(radiusDouble, -borderWidth, borderWidth, radiusDouble + borderWidth * 2));
+        CreateBorder("BottomBorder", new Rect(-borderWidth, -borderWidth, radiusDouble + borderWidth * 2, borderWidth));
+        CreateBorder("TopBorder", new Rect(-borderWidth, radiusDouble, radiusDouble + borderWidth * 2, borderWidth));
 	}
 
     private BoxCollider2D CreateBorder(string name, Rect rect)
@@ -81,8 +77,8 @@ public class Background : MonoBehaviour {
         border.layer = LayerMask.NameToLayer("Border");
         
         Vector2 center = rect.center;
-        center.x -= xDimension * 0.5f;
-        center.y -= yDimension * 0.5f;
+        center.x -= radius;
+        center.y -= radius;
         border.transform.position = center;
 
         var collider = border.GetComponent<BoxCollider2D>();
@@ -126,15 +122,22 @@ public class Background : MonoBehaviour {
 
     private bool CheckPosition(Vector2 pos)
     {
-        if (pos.x > xSafeDimension.x && pos.x < xSafeDimension.y && pos.y > ySafeDimension.x && pos.y < ySafeDimension.y)
+        float distance = pos.magnitude;
+        if (distance < innerRadius || distance > outerRadius)
             return false;
         return true;
     }
 
     private Vector2 CalcPosition()
     {
-        float x = Random.Range(0.0f, xDimension);
-        float y = Random.Range(0.0f, yDimension);
+        //float x = Random.Range(-halfDimension, halfDimension);
+        //float y = Random.Range(-halfDimension, halfDimension);
+
+        float radius = Random.Range(innerRadius, outerRadius);
+        float angle = Random.Range(0.0f, 360.0f);
+
+        float x = radius * Mathf.Cos(angle);
+        float y = radius * Mathf.Sin(angle);
         
         Vector2 currPos = new Vector2(x, y);
         return currPos;
