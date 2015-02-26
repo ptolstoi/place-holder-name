@@ -5,7 +5,7 @@ using System.Linq;
 public class FancyRotatedCamera : MonoBehaviour
 {
 
-    private Transform[] player;
+    private PlayerController[] player;
     public float minZoom = 10;
     public float lerpSpeed = 10;
 
@@ -13,15 +13,15 @@ public class FancyRotatedCamera : MonoBehaviour
 
     void Start()
     {
-        player = GameObject.FindGameObjectsWithTag("Player").Select(a => a.transform).ToArray();
+        player = GameObject.FindGameObjectsWithTag("Player").Select(p => p.GetComponent<PlayerController>()).ToArray();
     }
 
 	void Update ()
 	{
-	    var pos = player.Select(p => p.position).ToArray();
+	    var pos = player.Select(pc => new { p = pc.transform.position, v = pc.velocity.normalized });
 
-        var min = new Vector3(pos.Min(p => p.x), pos.Min(p => p.y));
-        var max = new Vector3(pos.Max(p => p.x), pos.Max(p => p.y));
+        var min = new Vector3(pos.Min(p => p.p.x + p.v.x), pos.Min(p => p.p.y + p.v.y));
+        var max = new Vector3(pos.Max(p => p.p.x + p.v.x), pos.Max(p => p.p.y + p.v.y));
 
 	    var center = (max - min)*0.5f + min;
 

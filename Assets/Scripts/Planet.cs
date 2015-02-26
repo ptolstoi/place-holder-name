@@ -65,6 +65,8 @@ public class Planet : MonoBehaviour
         rotationSpeed = Random.Range(-90, 90) + 180;
 
         transform.localScale *= 3 + Random.Range(-0.5f, 0.5f);
+
+        ChangeColor(ColorPalette.CalcColorCold(), 0);
     }
 
     void GenerateDecorations()
