@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     const float maximal_grapple_distance = 20;
 
+    public GameObject Explosion;
+
     public Background background;
     public KeyCode TheOneButton = KeyCode.Space;
     public Player Player = Player.Player1;
@@ -14,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float radius = 5.0f;
 
     public SpriteRenderer PlayerSprite;
+    public float DeathCoolDown = 5;
 
     private Planet[] planets;
 
@@ -35,6 +38,9 @@ public class PlayerController : MonoBehaviour
     private Quaternion startRotation;
 
     private bool Paused;
+    public float deathTimer { get; protected set; }
+
+    public event System.Action OnUnDie;
 
     // Use this for initialization
     void Start()
@@ -76,7 +82,15 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Paused) return;
+        deathTimer = Mathf.Max(-1, deathTimer - Time.deltaTime);
+        if (deathTimer < 0 && deathTimer + Time.deltaTime > 0)
+        {
+            if (OnUnDie != null)
+            {
+                OnUnDie();
+            }
+        }
+        if (Paused || deathTimer > 0) return;
         if (Input.GetKey(TheOneButton) && grappledPlanet == null)
         {
             var planet = GetNearestPlanet();
@@ -97,6 +111,17 @@ public class PlayerController : MonoBehaviour
         if (rotating)
         {
             RotateAroundCenter();
+        }
+    }
+
+    public void UnDie()
+    {
+        UnPause();
+        trail.Reset();
+        rotating = true;
+        foreach (var r in GetComponentsInChildren<Renderer>())
+        {
+            r.enabled = true;
         }
     }
 
@@ -274,6 +299,15 @@ public class PlayerController : MonoBehaviour
         {
             Die();
         }
+        else if (other.gameObject.tag == "Player" && !rotating)
+        {
+            var pc = other.GetComponent<PlayerController>();
+            if (!pc.rotating)
+            {
+                Die();
+                pc.Die();
+            }
+        }
     }
 
     void OnTriggerStay2D(Collider2D other)
@@ -286,6 +320,11 @@ public class PlayerController : MonoBehaviour
 
     void Die()
     {
+        if (rotating || deathTimer > 0) return;
+        var x = Instantiate(Explosion, transform.position, Quaternion.identity) as GameObject;
+        var ps = x.GetComponent<Explosion>();
+        ps.Player = this;
+
         transform.position = startPosition;
         transform.rotation = startRotation;
         velocity = startVelocity;
@@ -294,8 +333,13 @@ public class PlayerController : MonoBehaviour
         grappledPlanet = null;
 
         trail.Reset();
+        Pause();
 
-        rotating = true;
+        deathTimer = DeathCoolDown;
+        foreach (var r in GetComponentsInChildren<Renderer>())
+        {
+            r.enabled = false;
+        }
     }
 
     public void Pause()

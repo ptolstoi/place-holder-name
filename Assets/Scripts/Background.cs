@@ -118,7 +118,7 @@ public class Background : MonoBehaviour {
 
         var sr = border.AddComponent<SpriteRenderer>();
         var texture = new Texture2D(1, 1);
-        texture.SetPixel(0,0, Color.white);
+        texture.SetPixel(0,0, new Color(1,1,1,0.1f));
         texture.Apply();
         sr.sprite = Sprite.Create(texture, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 1);
 

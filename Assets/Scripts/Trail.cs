@@ -148,6 +148,7 @@ public class Trail : MonoBehaviour
     public void Reset()
     {
         sections.Clear();
+        mesh.Clear();
     }
 
     private class TrailSection
