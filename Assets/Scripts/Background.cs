@@ -61,6 +61,8 @@ public class Background : MonoBehaviour {
             }
         }
 
+        var centralPlanet = Instantiate(planetPrefab, new Vector3(0.0f, 0.0f, 0.0f), Quaternion.identity) as GameObject;
+        planets.Add(centralPlanet.GetComponent<Planet>());
         foreach (Vector2 pos in planetPositions)
         {         
             //Instantiate the prefabs

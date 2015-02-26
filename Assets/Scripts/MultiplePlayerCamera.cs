@@ -5,7 +5,6 @@ public class MultiplePlayerCamera : MonoBehaviour {
 
     private GameObject[] players;
     private Vector2 minW, maxW;
-    private float startDistance = 0.0f;
     private float frustumWidth, frustumHeight;
     public float minDistance = -10.0f;
     public float offset = 2.0f;
@@ -15,7 +14,6 @@ public class MultiplePlayerCamera : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         players = GameObject.FindGameObjectsWithTag("Player");
-        startDistance = Camera.main.transform.position.z;
         cameraRotated = Camera.main.transform.rotation != Quaternion.identity;
 
         CalcFrustumDimnensionW();
