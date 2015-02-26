@@ -12,8 +12,6 @@ public class PlayerController : MonoBehaviour
     public KeyCode TheOneButton = KeyCode.Space;
     public Player Player = Player.Player1;
     private bool rotating = true;
-    public float speed = 20.0f;
-    public float radius = 5.0f;
 
     public SpriteRenderer PlayerSprite;
     public float DeathCoolDown = 5;
@@ -106,6 +104,7 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKeyUp(TheOneButton) && grappledPlanet != null)
         {
             ReleaseGrapple();
+            rotating = false;
         }
 
         if (rotating)
@@ -132,11 +131,7 @@ public class PlayerController : MonoBehaviour
 
     private void RotateAroundCenter()
     {
-        Vector3 pos = transform.position;
-        Vector3 tangent = Vector3.Cross(new Vector3(0.0f, 0.0f, -1.0f), pos);
-        velocity = tangent.normalized * speed;
-
-        transform.position = Vector3.Lerp(pos, pos.normalized * radius, Time.deltaTime * 10);
+        grappledPlanet = planets[0];
     }
 
     Planet GetNearestPlanet()

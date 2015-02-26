@@ -233,4 +233,9 @@ public class Planet : MonoBehaviour
             yield return StartCoroutine(ChangeColorCoroutine(newColor, duration));
         }
     }
+
+    public void SetCentralPlanet()
+    {
+        GetComponent<CircleCollider2D>().enabled = false;
+    }
 }
