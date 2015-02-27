@@ -18,50 +18,65 @@ public class PointGUI : MonoBehaviour
     private float border;
 
     // Use this for initialization
-	void Start () {
-	    foreach (var stat in Background.ownership)
-	    {
-	        Players[(int) stat.Key].GetComponent<Image>().color = stat.Key.GetColor();
-            Players[(int) stat.Key].SetWidth(0);
-	    }
 
-	    rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
+    void Start()
+    {
+        foreach (var stat in Background.ownership)
+        {
+            var id = (int) stat.Key;
+            Players[id].GetComponent<Image>().color = stat.Key.GetColor();
+            Players[id].SetWidth(0);
+            Players[id].GetComponentInChildren<Text>().enabled = false;
+        }
+        rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
 
 	    border = rectTransform.GetWidth()*0.01f;
         restart.enabled = false;
         timeLeft.enabled = false;
 	}
 	
-	// Update is called once per frame
-	void Update ()
-	{
-	    if (!Background.GameStarted)
-	    {
-	        timeLeft.enabled = false;
-	        return;
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (!Background.GameStarted)
+        {
+            timeLeft.enabled = false;
+            return;
         }
+
+        if (Background.TimeLeft < 1)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                Players[i].GetComponentInChildren<Text>().enabled = true;
+
+            }
+        }
+
         timeLeft.enabled = true;
 
-	    var totalWidth = 0.0f;
-	    for (int i = 0; i < 4; ++i)
-	    {
-	        var player = (Player) i;
-	        var rect = Players[i];
+        var totalWidth = 0.0f;
+        for (int i = 0; i < 4; ++i)
+        {
+            var player = (Player)i;
+            var rect = Players[i];
             float owned = Background.ownership[player] / (float)Background.createdPlanets;
-	        var targetWidth = (rectTransform.GetWidth() - 3 * border)* owned;
-	        rect.SetWidth(Mathf.Lerp(rect.GetWidth(), targetWidth, Time.deltaTime * 4));
-	        totalWidth += rect.GetWidth() + border*(i != 3 && owned > 0 ? 1 : 0);
-	    }
+            var targetWidth = (rectTransform.GetWidth() - 3 * border) * owned;
+            rect.SetWidth(Mathf.Lerp(rect.GetWidth(), targetWidth, Time.deltaTime * 4));
+            totalWidth += rect.GetWidth() + border * (i != 3 && owned > 0 ? 1 : 0);
+            Players[i].GetComponentInChildren<Text>().text = Background.ownership[player].ToString();
+        }
 
-	    totalWidth /= 2;
-	    totalWidth -= border/2;
+        totalWidth /= 2;
+        totalWidth -= border / 2;
 
-	    for (int i = 0; i < 4; i++)
-	    {
-	        var rect = Players[i];
+        for (int i = 0; i < 4; i++)
+        {
+            var rect = Players[i];
             rect.SetLeftTopPosition(-Vector2.right * totalWidth + Vector2.up * rect.GetHeight() * 0.5f);
-	        totalWidth -= rect.GetWidth() + border;
-	    }
+            totalWidth -= rect.GetWidth() + border;
+        }
 
         if (Background.GameStarted)
         {

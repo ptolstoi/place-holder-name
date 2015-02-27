@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
     private bool Paused;
     public float Speed;
+    private float StartSpeed;
     private float outSideTimer;
     public float deathTimer { get; protected set; }
 
@@ -51,6 +52,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         IsActive = false;
+        StartSpeed = Speed;
         int planetCount = background.planets.Count;
         if (background && planetCount > 0)
         {
@@ -158,7 +160,13 @@ public class PlayerController : MonoBehaviour
             }
         }
         if (Paused || deathTimer > 0) return;
-        if (Input.GetKey(TheOneButton) && grappledPlanet == null)
+
+        Speed = Mathf.Lerp(Speed,
+            StartSpeed + Mathf.FloorToInt(Mathf.Abs(background.GameTime - background.TimeLeft)/20) * 5,
+            Time.deltaTime * 0.33f);
+        Speed = Mathf.Min(40, Speed);
+
+        if (InputIsGrappling() && grappledPlanet == null)
         {
             var planet = GetNearestPlanet();
 
@@ -177,7 +185,7 @@ public class PlayerController : MonoBehaviour
             background.GameStarted = true;
         }
 
-        if (transform.position.magnitude > background.outerRadius && grappledPlanet == null)
+        if (transform.position.magnitude > background.radius && grappledPlanet == null)
         {
             outSideTimer += Time.deltaTime;
             if (outSideTimer > OutSideDeathTimer)
@@ -345,8 +353,12 @@ public class PlayerController : MonoBehaviour
 
             if (grappledPlanet != null)
             {
-                lineRenderer.SetPosition(0, transform.position + transform.up * 0.5f);
-                lineRenderer.SetPosition(1, grappledPlanet.OuterPlanet.position);
+                var playerPosition = transform.position + transform.up*0.5f;
+                var planetPosition = grappledPlanet.OuterPlanet.position;
+
+                lineRenderer.SetPosition(0, playerPosition);
+                lineRenderer.SetPosition(1, planetPosition + (playerPosition - planetPosition).normalized 
+                    *grappledPlanet.transform.localScale.x * 0.5f);
             }
         }
     }
@@ -369,7 +381,8 @@ public class PlayerController : MonoBehaviour
         {
             planet.ReleaseGrapple(this);
         }
-        velocity = velocity.magnitude * transform.up;
+
+        velocity = Speed * transform.up;
         previous = grappledPlanet;
         grappledPlanet = null;
         isInOrbit = false;

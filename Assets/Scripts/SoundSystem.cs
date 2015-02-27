@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum ChordType
 {
@@ -17,11 +18,14 @@ public class SoundSystem : MonoBehaviour
     public float BPM = 85;
     public AudioSource BackgroundMusic;
     public AudioClip Chord;
+    private List<int> Notes = new List<int>();
+    private int lastChord;
 
     private Dictionary<AudioSource, IEnumerator> PlayTime;
 
     void Start()
     {
+        lastChord = -1;
         Instance = this;
         PlayTime = new Dictionary<AudioSource, IEnumerator>();
     }
@@ -35,7 +39,15 @@ public class SoundSystem : MonoBehaviour
         var time = chord * (Utils.Beat2Sec(4.0f * 4, BPM)) + (int)type * (Utils.Beat2Sec(4 * 4 * 4, BPM));
         if (type == ChordType.GrabOld || type == ChordType.GrabNew)
         {
-            time += Random.Range(0, 4)*Utils.Beat2Sec(4.0f, BPM);
+            if (lastChord != chord || Notes.Count == 0)
+            {
+                Notes.Clear();
+                Notes.AddRange(new[]{0,1,2,3});
+                Notes = Notes.Randomize().ToList();
+            }
+
+            time += Notes[0] * Utils.Beat2Sec(4.0f, BPM);
+            Notes.RemoveAt(0);
         }
         source.time = time;
         source.Play();
