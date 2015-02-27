@@ -166,6 +166,11 @@ public class PlayerController : MonoBehaviour
                 Die();
             }
         }
+
+        if(Input.GetKey(TheOneButton) && !background.GameStarted)
+        {
+            background.GameStarted = true;
+        }
     }
 
     public void UnDie()

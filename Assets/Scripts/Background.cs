@@ -24,10 +24,12 @@ public class Background : MonoBehaviour {
     private PlayerController[] players;
 
     public float TimeLeft { get; protected set; }
+    public bool GameStarted { get; set; }
 
 	// Use this for initialization
 	void Start ()
     {
+        GameStarted = false;
         players = GameObject.FindGameObjectsWithTag("Player").Select(p => p.GetComponent<PlayerController>()).ToArray();
 
 	    TimeLeft = GameTime;
@@ -87,7 +89,8 @@ public class Background : MonoBehaviour {
     {
         if (TimeLeft > 0)
         {
-            TimeLeft -= Time.deltaTime;
+            if(GameStarted)
+                TimeLeft -= Time.deltaTime;
         }
         else
         {
