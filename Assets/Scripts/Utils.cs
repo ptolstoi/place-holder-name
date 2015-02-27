@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using InControl;
 using UnityEngine;
+using System.Linq;
 
 public struct HSBColor
 {
@@ -20,6 +22,11 @@ public struct HSBColor
 
 public static class Utils
 {
+    public static IEnumerable<T> Randomize<T>(this IEnumerable<T> source)
+    {
+        var rnd = new System.Random();
+        return source.OrderBy<T, int>((item) => rnd.Next());
+    }
 
     public static void Vibrate(this InputDevice device, MonoBehaviour gameObject, float duration, float intensity)
     {

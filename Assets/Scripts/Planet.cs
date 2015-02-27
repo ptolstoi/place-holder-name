@@ -82,7 +82,7 @@ public class Planet : MonoBehaviour
         if (Celestial)
         {
             transform.localScale = 6 * Vector3.one;
-            ChangeColor(new Color(1, 1, 0.9f), 0.1f);
+            ChangeColor(new Color(1, 1, 0.8f), 0.1f);
             glowMaterial.color = new Color(1, 1, 0.9f, 0f);
             glowMaterial.SetFloat("_Alpha", 0.5f);
             Glow.transform.localScale *= 1.2f;

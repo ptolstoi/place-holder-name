@@ -106,8 +106,11 @@ public class Background : MonoBehaviour {
 
     private void OnDrawGizmosSelected()
     {
+        Gizmos.color = Color.white;
         Gizmos.DrawWireSphere(transform.position, innerRadius);
         Gizmos.DrawWireSphere(transform.position, outerRadius);
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, radius);
     }
 
     private BoxCollider2D CreateBorder(string name, Rect rect)

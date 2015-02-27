@@ -254,7 +254,7 @@ MonoBehaviour:
   DeathCoolDown: 5
   OutSideDeathTimer: .100000001
   velocity: {x: 0, y: 25, z: 0}
-  Speed: 25
+  Speed: 20
 --- !u!120 &12000460
 LineRenderer:
   m_ObjectHideFlags: 1
