@@ -8,6 +8,7 @@ public class Planet : MonoBehaviour
 
     public Transform OuterPlanet;
     public Transform InnerPlanet;
+    public MeshRenderer Glow;
     public AnimationCurve PlayerChangeAnimation;
     public AnimationCurve WobbleAnimation;
 
@@ -27,6 +28,7 @@ public class Planet : MonoBehaviour
 
     private Material outerPlanetMaterial;
     private Material ringMaterial;
+    private Material glowMaterial;
 
     public Player Owner { get; protected set; }
 
@@ -37,12 +39,18 @@ public class Planet : MonoBehaviour
     protected Quaternion defaultUp;
     public bool Celestial;
 
-    public void ChangeOwner(Player newOwner)
+    public void ChangeOwner(PlayerController newOwner)
     {
-        if (Owner != newOwner && !Celestial)
+        if (Owner != newOwner.Player && !Celestial)
         {
-            ChangeColor(newOwner.GetColor(), TransitionDuration);
-            Owner = newOwner;
+            ChangeColor(newOwner.Player.GetColor(), TransitionDuration);
+            Owner = newOwner.Player;
+
+            SoundSystem.Instance.PlayChord(newOwner.audio, ChordType.GrabNew);
+        }
+        else
+        {
+            SoundSystem.Instance.PlayChord(newOwner.audio, ChordType.GrabOld);
         }
     }
 
@@ -73,6 +81,9 @@ public class Planet : MonoBehaviour
         {
             transform.localScale = 6 * Vector3.one;
             ChangeColor(new Color(1, 1, 0.9f), 0.1f);
+            glowMaterial.color = new Color(1, 1, 0.9f, 0f);
+            glowMaterial.SetFloat("_Alpha", 0.5f);
+            Glow.transform.localScale *= 1.2f;
         }
 
         if (!Celestial)
@@ -81,10 +92,15 @@ public class Planet : MonoBehaviour
             ChangeColor(color, 0);
             defaultUp = Quaternion.Euler(40, 0, 0);
             transform.rotation = defaultUp;
+            glowMaterial.SetFloat("_Alpha", 0.42f);
 
             ringMaterial.color = color;
+            glowMaterial.color = color;
         }
-
+        glowMaterial.mainTextureOffset += Vector2.right*Random.Range(0f, 1f);
+        Glow.transform.SetParent(null);
+        Glow.transform.eulerAngles = new Vector3(180, 0, 0);
+        Glow.transform.position += Vector3.up*0.5f;
     }
 
     void GenerateDecorations()
@@ -105,6 +121,9 @@ public class Planet : MonoBehaviour
         Decorations[0].GetComponent<MeshRenderer    >().material = ringMaterial;
         Decorations[1].GetComponent<MeshRenderer>().material = ringMaterial;
         Decorations[2].GetComponent<MeshRenderer>().material = ringMaterial;
+
+        glowMaterial = new Material(Glow.material);
+        Glow.material = glowMaterial;
 
         if (Celestial)
         {
@@ -163,6 +182,8 @@ public class Planet : MonoBehaviour
 
     void Update()
     {
+        glowMaterial.mainTextureOffset += new Vector2(0.25f * Time.deltaTime, 0);
+
         if (Celestial)
         {
             return;
@@ -181,6 +202,8 @@ public class Planet : MonoBehaviour
                 ++i;
             }
         }
+
+        Glow.transform.position = transform.position + Vector3.up * transform.localScale.x * 0.5f + Vector3.forward * 0.5f;
 
         if (GrappledPlayer != null)
         {
@@ -205,6 +228,9 @@ public class Planet : MonoBehaviour
                 WobbleAnimation.Evaluate(wobbleTime / MaxWobbleTime));
             wobbleTime += Time.deltaTime;
         }
+
+        Vector2 bias = (InnerPlanet.transform.position - transform.position);
+        Glow.transform.position += (Vector3)bias;
     }
 
     void ChangeColor(Color newColor, float duration)
@@ -220,6 +246,7 @@ public class Planet : MonoBehaviour
 
         var mr = InnerPlanet.GetComponent<MeshRenderer>();
         var oldColor = !Celestial ? ringMaterial.color : Color.clear;
+        glowMaterial.color = newColor;
 
         while (timePassed < duration)
         {
@@ -258,6 +285,6 @@ public class Planet : MonoBehaviour
 
     public void SetCentralPlanet()
     {
-        GetComponent<CircleCollider2D>().enabled = false;
+        GetComponent<CircleCollider2D>().center = Vector2.zero;
     }
 }

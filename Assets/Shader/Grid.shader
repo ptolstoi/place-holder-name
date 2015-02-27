@@ -6,7 +6,9 @@
 	SubShader {
 		Pass {
 			Tags { "RenderType"="10" }
+			Blend One One 
 			Cull Back
+			ZWrite Off
 			LOD 200
 		
 			CGPROGRAM
@@ -99,7 +101,7 @@
     
 				float4 fetch = tex2D(_MainTex, i.texcoord + _Time.x * 0.2);
     
-				fetch = saturate(fetch * 2.) * 0.5;
+				fetch = saturate(fetch * 5.) * 0.5;
     
 				return fetch * intens;
 			}

@@ -18,16 +18,17 @@ public class FancyRotatedCamera : MonoBehaviour
 
 	void Update ()
 	{
-	    var pos = player.Select(pc => new { p = pc.transform.position, v = pc.velocity.normalized });
+	    var pos = player.Select(pc => new { p = pc.transform.position, v = pc.velocity.normalized, t = pc.transform });
         
         int count = 0;
 
         List<Vector3> validPositions = new List<Vector3>();
         foreach(var p in pos)
         {
-            if(!player[count].GetRotating())
+            if (player[count].IsActive)
             {
-                validPositions.Add(p.p + p.v);
+                var poz = p.p + p.v.magnitude*p.t.up;
+                validPositions.Add(poz);
             }
             count++;
         }
@@ -56,7 +57,7 @@ public class FancyRotatedCamera : MonoBehaviour
 
 	    var maxSide = Mathf.Max(minZoom, Mathf.Max(size.x, size.y));
 
-	    var targetPosition = center + Vector3.back*(Mathf.Sqrt(maxSide) * 4.2f + 0.24f * maxSide);
+	    var targetPosition = center + Vector3.back*(Mathf.Sqrt(maxSide) * 4.2f + 0.24f * maxSide + 5);
 
         lastPosition = Vector3.Lerp(lastPosition, targetPosition, Time.deltaTime * lerpSpeed);
 	    transform.position = lastPosition;

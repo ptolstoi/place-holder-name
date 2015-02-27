@@ -133,16 +133,23 @@ public class Background : MonoBehaviour {
         return collider;
     }
 
-    public void ChangeOwner(Planet planet, Player newOwner)
+    public void ChangeOwner(Planet planet, PlayerController newOwner, bool playSound = true)
     {
-        if (planet.Celestial) return;
+        if (planet.Celestial)
+        {
+            if (playSound)
+            {
+                SoundSystem.Instance.PlayChord(newOwner.audio, ChordType.GrabOld);
+            }
+            return;
+        }
         var previousOwner = planet.Owner;
         if (previousOwner != Player.PlayerNone)
         {
             ownership[previousOwner]--;
         }
 
-        ownership[newOwner]++;
+        ownership[newOwner.Player]++;
 
         planet.ChangeOwner(newOwner);
     }

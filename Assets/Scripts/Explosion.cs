@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 public class Explosion : MonoBehaviour
@@ -17,15 +16,15 @@ public class Explosion : MonoBehaviour
         particleSystem.GetParticles(ps);
         for (int i = 0; i < ps.Length; i++)
         {
-            ps[i].velocity = new Vector3(ps[i].velocity.x, ps[i].velocity.y) + 
-                Player.velocity.magnitude * Player.transform.up;
+            ps[i].velocity = new Vector3(ps[i].velocity.x, ps[i].velocity.y);
             ps[i].velocity = Vector3.Lerp(ps[i].velocity, Vector3.zero, Time.deltaTime * 2);
-            ps[i].position = new Vector3(ps[i].position.x, ps[i].position.y);
+            ps[i].position = new Vector3(ps[i].position.x, ps[i].position.y, 0.5f);
         }
         particleSystem.SetParticles(ps, ps.Length);
 
         Player.OnUnDie += PlayerOnOnUnDie;
         UnDie = false;
+        transform.position += Vector3.back*0.5f;
     }
 
     private void PlayerOnOnUnDie()
@@ -36,8 +35,7 @@ public class Explosion : MonoBehaviour
 
         for (int i = 0; i < ps.Length; i++)
         {
-            ps[i].velocity = (Player.transform.position - ps[i].position).normalized*
-                             Vector3.Distance(ps[i].position, Player.transform.position);
+            ps[i].velocity = -ps[i].position;
         }
 
         particleSystem.SetParticles(ps, ps.Length);
@@ -53,21 +51,18 @@ public class Explosion : MonoBehaviour
         {
             for (int i = 0; i < ps.Length; i++)
             {
-//                ps[i].velocity = new Vector3(ps[i].velocity.x, ps[i].velocity.y) + 
-//                    (Player.transform.position - ps[i].position).normalized * Time.deltaTime * 3;
+                var distortion = Random.onUnitSphere;
+                distortion.Scale(new Vector3(1, 1, 0));
+                ps[i].velocity += distortion; 
                 ps[i].velocity = Vector3.Lerp(ps[i].velocity, Vector3.zero, Time.deltaTime);
-//                ps[i].position = new Vector3(ps[i].position.x, ps[i].position.y);
                 ps[i].lifetime = 1;
             }
         }
         else
         {
-            Die();
             for (int i = 0; i < ps.Length; i++)
             {
-//                ps[i].velocity = Vector3.Lerp(ps[i].velocity, Vector3.zero, Time.deltaTime * 2);
-//                ps[i].position = new Vector3(ps[i].position.x, ps[i].position.y);
-                if (Vector2.Distance(ps[i].position, Player.transform.position) < 1 && ps[i].lifetime > 0.5f)
+                if (ps[i].position.magnitude < 7 && ps[i].lifetime > 0.5f)
                 {
                     ps[i].lifetime = 0;
                     ps[i].velocity = Vector3.zero;
@@ -83,7 +78,6 @@ public class Explosion : MonoBehaviour
 
         if (ps.Length == 0 && UnDie)
         {
-            print("ttttt");
             Die();
         }
     }

@@ -19,6 +19,16 @@ public struct HSBColor
 public static class Utils
 {
 
+    public static float Sec2Beat(this float sec, float bpm)
+    {
+        return sec / (60 / bpm);
+    }
+
+    public static float Beat2Sec(this float beat, float bpm)
+    {
+        return beat * (60 / bpm);
+    }
+
     public static Color ToColor(float hue, float saturation, float brighness, float alpha)
     {
         return ToColor(
