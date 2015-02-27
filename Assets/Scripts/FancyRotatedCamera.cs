@@ -29,9 +29,14 @@ public class FancyRotatedCamera : MonoBehaviour
             {
                 var poz = p.p + p.v.magnitude*p.t.up;
                 validPositions.Add(poz);
+                count++;
             }
-            count++;
         }
+
+	    if (count == 0)
+	    {
+	        return;
+	    }
 
         Vector3 min = new Vector3(Mathf.Infinity, Mathf.Infinity);
         Vector3 max = new Vector3(-Mathf.Infinity, -Mathf.Infinity);

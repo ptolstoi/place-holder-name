@@ -86,6 +86,11 @@ public class PlayerController : MonoBehaviour
         outSideTimer = 0;
 
         RotateAroundCenter();
+
+        if (GetInputDevice() != null)
+        {
+            GetInputDevice().Vibrate(0);
+        }
     }
 
     InputDevice GetInputDevice()
@@ -384,6 +389,11 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Planet"))
         {
+            var planet = other.gameObject.GetComponent<Planet>();
+            if (planet != null && !planet.Celestial)
+            {
+                background.ChangeOwner(planet, this, false);
+            }
             Die();
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("Border") && grappledPlanet == null)
@@ -451,5 +461,13 @@ public class PlayerController : MonoBehaviour
     {
         Paused = false;
         trail.UnPause();
+    }
+
+    void OnApplicationQuit()
+    {
+        if (GetInputDevice() != null)
+        {
+            GetInputDevice().Vibrate(0);
+        }
     }
 }

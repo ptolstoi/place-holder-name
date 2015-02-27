@@ -46,6 +46,8 @@ public class Planet : MonoBehaviour
             ChangeColor(newOwner.Player.GetColor(), TransitionDuration);
             Owner = newOwner.Player;
 
+            glowMaterial.mainTextureOffset += new Vector2(0.5f,0);
+
             SoundSystem.Instance.PlayChord(newOwner.audio, ChordType.GrabNew);
         }
         else
