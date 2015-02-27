@@ -93,6 +93,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void ClearPlayerPlanets()
+    {
+        foreach(var planet in planets)
+        {
+            planet.ClearOwner();
+        }
+    }
+
     InputDevice GetInputDevice()
     {
         var id = (int)Player;

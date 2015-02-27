@@ -24,12 +24,17 @@ public class Background : MonoBehaviour {
     private PlayerController[] players;
 
     public float TimeLeft { get; protected set; }
+    public float CurrPauseTime { get; set; }
+    public float pauseTime;
     public bool GameStarted { get; set; }
+    public bool Restart { get; set; }
 
 	// Use this for initialization
 	void Start ()
     {
         GameStarted = false;
+        Restart = false;
+        pauseTime = GameTime;
         players = GameObject.FindGameObjectsWithTag("Player").Select(p => p.GetComponent<PlayerController>()).ToArray();
 
 	    TimeLeft = GameTime;
@@ -91,15 +96,33 @@ public class Background : MonoBehaviour {
         {
             if(GameStarted)
                 TimeLeft -= Time.deltaTime;
+            CurrPauseTime = GameTime;
+            Restart = false;
         }
         else
         {
             TimeLeft = 0;
-
-
+            
             foreach (var player in players)
             {
                 player.Pause();
+            }
+            CurrPauseTime -= Time.deltaTime;
+
+            if(CurrPauseTime <= 0.0f)
+            {
+                TimeLeft = GameTime;
+                CurrPauseTime = 0.0f;
+                foreach(var player in players)
+                {
+                    player.ClearPlayerPlanets();
+                    player.UnPause();
+                }
+                Restart = true;
+                foreach(var planet in planets)
+                {
+                    planet.ClearOwner();
+                }
             }
         }
     }
