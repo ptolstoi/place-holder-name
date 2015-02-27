@@ -11,25 +11,30 @@ public class PointGUI : MonoBehaviour
     public RectTransform[] Players;
 
     public Text timeLeft;
+    public Text restart;
+    public Text start;
 
     private RectTransform rectTransform;
     private float border;
 
     // Use this for initialization
+
     void Start()
     {
         foreach (var stat in Background.ownership)
         {
-            var id = (int)stat.Key;
+            var id = (int) stat.Key;
             Players[id].GetComponent<Image>().color = stat.Key.GetColor();
             Players[id].SetWidth(0);
             Players[id].GetComponentInChildren<Text>().enabled = false;
         }
-
         rectTransform = transform.GetChild(0).GetComponent<RectTransform>();
 
-        border = rectTransform.GetWidth() * 0.01f;
-    }
+	    border = rectTransform.GetWidth()*0.01f;
+        restart.enabled = false;
+        timeLeft.enabled = false;
+	}
+	
 
     // Update is called once per frame
     void Update()
@@ -73,10 +78,27 @@ public class PointGUI : MonoBehaviour
             totalWidth -= rect.GetWidth() + border;
         }
 
-        var time = Mathf.FloorToInt(Background.TimeLeft);
-        var mins = Mathf.FloorToInt(time / 60.0f);
-        var secs = time - mins * 60;
+        if (Background.GameStarted)
+        {
+            start.enabled = false;
+            var time = Mathf.FloorToInt(Background.TimeLeft);
+            if (Background.TimeLeft == 0.0f)
+            {
+                timeLeft.enabled = false;
+                restart.enabled = true;
+                time = Mathf.FloorToInt(Background.CurrPauseTime);
+            }
+            else
+            {
+                timeLeft.enabled = true;
+                restart.enabled = false;
+            }
 
-        timeLeft.text = String.Format("{0:00}:{1:00}", mins, secs);
-    }
+            var mins = Mathf.FloorToInt(time / 60.0f);
+            var secs = time - mins * 60;
+
+            timeLeft.text = String.Format("{0:00}:{1:00}", mins, secs);
+            restart.text = String.Format("{0:00}:{1:00}", mins, secs) + "\nSeconds until restart";
+        }
+	}
 }

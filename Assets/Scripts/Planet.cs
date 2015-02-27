@@ -289,4 +289,10 @@ public class Planet : MonoBehaviour
     {
         GetComponent<CircleCollider2D>().center = Vector2.zero;
     }
+
+    public void ClearOwner()
+    {
+        Owner = Player.PlayerNone;
+        Debug.Log("Clear Planet");
+    }
 }
