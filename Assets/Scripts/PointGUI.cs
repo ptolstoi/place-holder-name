@@ -31,6 +31,13 @@ public class PointGUI : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+	    if (!Background.GameStarted)
+	    {
+	        timeLeft.enabled = false;
+	        return;
+        }
+        timeLeft.enabled = true;
+
 	    var totalWidth = 0.0f;
 	    for (int i = 0; i < 4; ++i)
 	    {
