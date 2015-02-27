@@ -249,9 +249,9 @@ public class PlayerController : MonoBehaviour
                 p,
                 dist = Vector3.Distance(p.transform.position, transform.position)
             }).OrderBy(p => p.dist).First();
-            if (nextPlanet.dist < nextPlanet.t.localScale.x)
+            if (nextPlanet.dist < nextPlanet.t.localScale.x * 1.4f)
             {
-                velocity += (transform.position - nextPlanet.t.position).normalized * 2 * (nextPlanet.p.Celestial ? -2 : 1);
+                velocity += (transform.position - nextPlanet.t.position).normalized * 2 * (nextPlanet.p.Celestial ? -0.5f : 1);
             } 
         }
         if (grappledPlanet != null)
