@@ -618,7 +618,7 @@ MonoBehaviour:
   planets: []
   createdPlanets: 0
   GameTime: 138
-  pauseTime: 10
+  pauseTime: 2
 --- !u!4 &432622175
 Transform:
   m_ObjectHideFlags: 0
@@ -7198,6 +7198,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minZoom: 40
   lerpSpeed: 5
+  Angle:
+    serializedVersion: 2
+    m_Curve:
+    - time: 39.7413254
+      value: -19.8063946
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 100.898521
+      value: -.100426525
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!1 &1970814338
 GameObject:
   m_ObjectHideFlags: 0

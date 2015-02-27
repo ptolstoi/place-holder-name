@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
         {
             planet.ClearOwner();
         }
-        Die();
+//        Die();
     }
 
     InputDevice GetInputDevice()
@@ -177,12 +177,14 @@ public class PlayerController : MonoBehaviour
             }
 
             rotating = false;
+            IsActive = true;
         }
         else if (InputStoppedGrappling() && grappledPlanet != null)
         {
             ReleaseGrapple();
             rotating = false;
             background.GameStarted = true;
+            IsActive = true;
         }
 
         if (transform.position.magnitude > background.radius && grappledPlanet == null)
@@ -205,7 +207,13 @@ public class PlayerController : MonoBehaviour
             r.enabled = true;
         }
 
-        SoundSystem.Instance.PlayChord(audio, ChordType.Revive);
+        SoundSystem.Instance.PlayChord(audio, ChordType.Revive); 
+        
+        if (GetInputDevice() != null)
+        {
+            GetInputDevice().Vibrate(this, 0.4f, 0.4f);
+        }
+
     }
 
     public bool GetRotating()
@@ -218,7 +226,7 @@ public class PlayerController : MonoBehaviour
         rotating = true;
         grappledPlanet = planets[0];
         GrappleOnPlanet(true);
-        IsActive = true;
+//        IsActive = true;
     }
 
     Planet GetNearestPlanet()
@@ -372,6 +380,12 @@ public class PlayerController : MonoBehaviour
         background.ChangeOwner(grappledPlanet, this, !force);
         grappledPlanet.Grapple(this);
         trailMaterialControler.SetDirection(clockwise ? 1 : -1);
+        
+        if (GetInputDevice() != null)
+        {
+            var d = transform.position.x - grappledPlanet.transform.position.x;
+            GetInputDevice().Vibrate(this, 0.4f, Mathf.Clamp01(d), Mathf.Clamp01(-d));
+        }
     }
 
     private void ReleaseGrapple()
@@ -393,28 +407,21 @@ public class PlayerController : MonoBehaviour
         Debug.Log(LayerMask.LayerToName(other.gameObject.layer));
         if (other.gameObject.layer == LayerMask.NameToLayer("Planet"))
         {
-            Die();
-        }
-        else if (other.gameObject.layer == LayerMask.NameToLayer("Border") && grappledPlanet == null)
-        {
+            var planet = other.gameObject.GetComponent<Planet>();
+            if (planet != null && !planet.Celestial)
+            {
+                background.ChangeOwner(planet, this, false);
+            }
             Die();
         }
         else if (other.gameObject.tag == "Player" && IsActive && !rotating)
         {
             var pc = other.GetComponent<PlayerController>();
-            if (!pc.IsActive && !pc.rotating && deathTimer < 0)
+            if (pc.IsActive && !pc.rotating && deathTimer < 0)
             {
                 Die();
                 pc.Die();
             }
-        }
-    }
-
-    void OnTriggerStay2D(Collider2D other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Border") && grappledPlanet == null)
-        {
-            Die();
         }
     }
 
@@ -426,6 +433,11 @@ public class PlayerController : MonoBehaviour
         ps.Player = this;
 
         SoundSystem.Instance.PlayChord(audio, ChordType.Die);
+
+        if (GetInputDevice() != null)
+        {
+            GetInputDevice().Vibrate(this, 0.4f, 1);
+        }
 
         transform.position = startPosition;
         transform.rotation = startRotation;

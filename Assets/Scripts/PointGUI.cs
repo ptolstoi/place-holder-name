@@ -82,7 +82,7 @@ public class PointGUI : MonoBehaviour
         {
             start.enabled = false;
             var time = Mathf.FloorToInt(Background.TimeLeft);
-            if (Background.TimeLeft == 0.0f)
+            if (Background.TimeLeft < 1.0f)
             {
                 timeLeft.enabled = false;
                 restart.enabled = true;

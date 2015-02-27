@@ -8,6 +8,7 @@ public class FancyRotatedCamera : MonoBehaviour
     private PlayerController[] player;
     public float minZoom = 10;
     public float lerpSpeed = 10;
+    public AnimationCurve Angle;
 
     private Vector3 lastPosition;
 
@@ -62,12 +63,14 @@ public class FancyRotatedCamera : MonoBehaviour
 
 	    var maxSide = Mathf.Max(minZoom, Mathf.Max(size.x, size.y));
 
-	    var targetPosition = center + Vector3.back*(Mathf.Sqrt(maxSide) * 4.2f + 0.24f * maxSide + 5);
+	    var distance = Mathf.Sqrt(maxSide)*4.2f + 0.24f*maxSide + 5;
+	    var targetPosition = center + Vector3.back*distance;
 
         lastPosition = Vector3.Lerp(lastPosition, targetPosition, Time.deltaTime * lerpSpeed);
 	    transform.position = lastPosition;
 
         transform.rotation = Quaternion.identity;
+	    var angle = Angle.Evaluate(distance);
         transform.RotateAround(center, Vector3.right, -20);
 	}
 }

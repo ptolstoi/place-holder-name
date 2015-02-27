@@ -34,7 +34,6 @@ public class Background : MonoBehaviour {
     {
         GameStarted = false;
         Restart = false;
-        pauseTime = GameTime;
         players = GameObject.FindGameObjectsWithTag("Player").Select(p => p.GetComponent<PlayerController>()).ToArray();
 
 	    TimeLeft = GameTime;
@@ -92,11 +91,19 @@ public class Background : MonoBehaviour {
 
     void Update()
     {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.LoadLevel(0);
+        }
+
         if (TimeLeft > 0)
         {
             if(GameStarted)
+            { 
                 TimeLeft -= Time.deltaTime;
-            CurrPauseTime = GameTime;
+                CurrPauseTime = pauseTime;
+            }
+                
             Restart = false;
         }
         else
@@ -123,6 +130,14 @@ public class Background : MonoBehaviour {
                 {
                     planet.ClearOwner();
                 }
+               
+                foreach(var player in players)
+                {
+                    ownership[player.Player] = 0;
+                    player.UnDie();
+                }
+
+                Application.LoadLevel(0);
             }
         }
     }

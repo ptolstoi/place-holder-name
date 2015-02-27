@@ -12,7 +12,6 @@
 			LOD 200
             Lighting Off
 			ZWrite Off
-			Alphatest Greater 0
 			ColorMask RGB
 		
 			CGPROGRAM
@@ -29,13 +28,13 @@
 
 			struct v2f {
 				float4 vertex : SV_POSITION;
-				half2 texcoord : TEXCOORD0;
+				float2 texcoord : TEXCOORD0;
 				float4 color : COLOR;
 			};
             
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
-			uniform half4 _Color;
+			uniform float4 _Color;
 			float _Alpha;
 			
 			v2f vert (appdata_t v)
