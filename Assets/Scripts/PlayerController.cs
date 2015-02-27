@@ -153,6 +153,8 @@ public class PlayerController : MonoBehaviour
                 lastDistance = float.MaxValue;
             }
 
+            if (!background.GameStarted)
+                background.GameStarted = true;
             rotating = false;
         }
         else if (InputStoppedGrappling() && grappledPlanet != null)
@@ -160,6 +162,8 @@ public class PlayerController : MonoBehaviour
             IsActive = true;
             ReleaseGrapple();
             rotating = false;
+            if (!background.GameStarted)
+                background.GameStarted = true;
         }
 
         if (transform.position.magnitude > background.outerRadius && grappledPlanet == null)
