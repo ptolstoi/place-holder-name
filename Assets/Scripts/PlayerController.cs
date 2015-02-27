@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
+using InControl;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -86,6 +88,38 @@ public class PlayerController : MonoBehaviour
         RotateAroundCenter();
     }
 
+    bool InputIsGrappling()
+    {
+        if (Input.GetKey(TheOneButton))
+        {
+            return true;
+        }
+
+        var id = (int)Player;
+        if (InputManager.Devices.Count > id)
+        {
+            return InputManager.Devices[id].Action1.IsPressed;
+        }
+        
+        return false;
+    }
+
+    bool InputStoppedGrappling()
+    {
+        if (Input.GetKeyUp(TheOneButton))
+        {
+            return true;
+        }
+        
+        var id = (int)Player;
+        if (InputManager.Devices.Count > id)
+        {
+            return InputManager.Devices[id].Action1.WasReleased;
+        }
+
+        return false;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -104,8 +138,9 @@ public class PlayerController : MonoBehaviour
             }
         }
         if (Paused || deathTimer > 0) return;
-        if (Input.GetKey(TheOneButton) && grappledPlanet == null)
+        if (InputIsGrappling() && grappledPlanet == null)
         {
+            IsActive = true;
             var planet = GetNearestPlanet();
 
             if (planet != null)
@@ -116,8 +151,9 @@ public class PlayerController : MonoBehaviour
 
             rotating = false;
         }
-        else if (Input.GetKeyUp(TheOneButton) && grappledPlanet != null)
+        else if (InputStoppedGrappling() && grappledPlanet != null)
         {
+            IsActive = true;
             ReleaseGrapple();
             rotating = false;
         }
@@ -155,7 +191,7 @@ public class PlayerController : MonoBehaviour
         rotating = true;
         grappledPlanet = planets[0];
         GrappleOnPlanet(true);
-        IsActive = true;
+        //IsActive = true;
     }
 
     Planet GetNearestPlanet()
@@ -321,7 +357,6 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(LayerMask.LayerToName(other.gameObject.layer));
         if (other.gameObject.layer == LayerMask.NameToLayer("Planet"))
         {
             Die();
