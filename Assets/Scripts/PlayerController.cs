@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
 
             rotating = false;
         }
-        else if (Input.GetKeyUp(TheOneButton) && grappledPlanet != null)
+        else if (InputStoppedGrappling() && grappledPlanet != null)
         {
             ReleaseGrapple();
             rotating = false;
