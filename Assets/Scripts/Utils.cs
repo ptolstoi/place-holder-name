@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using InControl;
+using UnityEngine;
 
 public struct HSBColor
 {
@@ -18,6 +20,23 @@ public struct HSBColor
 
 public static class Utils
 {
+
+    public static void Vibrate(this InputDevice device, MonoBehaviour gameObject, float duration, float intensity)
+    {
+        device.Vibrate(gameObject, duration, intensity, intensity);
+    }
+
+    public static void Vibrate(this InputDevice device, MonoBehaviour gameObject, float duration, float intensityLeft, float intensityRight)
+    {
+        device.Vibrate(intensityLeft, intensityRight);
+        gameObject.StartCoroutine(StopVibrate(device, duration));
+    }
+
+    private static IEnumerator StopVibrate(InputDevice device, float time)
+    {
+        yield return new WaitForSeconds(time);
+        device.Vibrate(0);
+    }
 
     public static float Sec2Beat(this float sec, float bpm)
     {

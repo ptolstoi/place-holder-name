@@ -88,6 +88,12 @@ public class PlayerController : MonoBehaviour
         RotateAroundCenter();
     }
 
+    InputDevice GetInputDevice()
+    {
+        var id = (int)Player;
+        return InputManager.Devices.Count > id ? InputManager.Devices[id] : null;
+    }
+
     bool InputIsGrappling()
     {
         if (Input.GetKey(TheOneButton))
@@ -95,10 +101,9 @@ public class PlayerController : MonoBehaviour
             return true;
         }
 
-        var id = (int)Player;
-        if (InputManager.Devices.Count > id)
+        if (GetInputDevice() != null)
         {
-            return InputManager.Devices[id].Action1.IsPressed;
+            return GetInputDevice().Action1.IsPressed;
         }
         
         return false;
@@ -110,11 +115,10 @@ public class PlayerController : MonoBehaviour
         {
             return true;
         }
-        
-        var id = (int)Player;
-        if (InputManager.Devices.Count > id)
+
+        if (GetInputDevice() != null)
         {
-            return InputManager.Devices[id].Action1.WasReleased;
+            return GetInputDevice().Action1.WasReleased;
         }
 
         return false;
@@ -179,6 +183,11 @@ public class PlayerController : MonoBehaviour
         } 
         
         SoundSystem.Instance.PlayChord(audio, ChordType.Revive);
+
+        if (GetInputDevice() != null)
+        {
+            GetInputDevice().Vibrate(this, 0.4f, 0.5f);
+        }
     }
 
     public bool GetRotating()
@@ -340,6 +349,13 @@ public class PlayerController : MonoBehaviour
         lastDistance = float.MaxValue;
         background.ChangeOwner(grappledPlanet, this, !force);
         grappledPlanet.Grapple(this);
+
+        if (GetInputDevice() != null)
+        {
+            var d = distance*(transform.position.x - grappledPlanet.transform.position.x) < 0 ? -1 : 1;
+            
+            GetInputDevice().Vibrate(this, 0.4f, d, -d);
+        }
     }
 
     private void ReleaseGrapple()
@@ -390,6 +406,11 @@ public class PlayerController : MonoBehaviour
         var x = Instantiate(Explosion, transform.position, transform.rotation) as GameObject;
         var ps = x.GetComponent<Explosion>();
         ps.Player = this;
+
+        if (GetInputDevice() != null)
+        {
+            GetInputDevice().Vibrate(this, 0.4f, 1);
+        }
 
         SoundSystem.Instance.PlayChord(audio, ChordType.Die);
 
