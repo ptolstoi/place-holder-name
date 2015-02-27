@@ -173,6 +173,7 @@ public class PlayerController : MonoBehaviour
         {
             ReleaseGrapple();
             rotating = false;
+            background.GameStarted = true;
         }
 
         if (transform.position.magnitude > background.outerRadius && grappledPlanet == null)
