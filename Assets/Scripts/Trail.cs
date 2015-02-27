@@ -20,6 +20,7 @@ public class Trail : MonoBehaviour
     int[] triangles;
 
     private Vector2 position;
+    private Vector2 bitangent;
     private TrailSection currentSection;
 
     private TrailSection[] window;
@@ -33,6 +34,7 @@ public class Trail : MonoBehaviour
     void LateUpdate()
     {
         position = transform.position;
+        bitangent = transform.right;
 
         int lastIndex = sections.Count - 1;
 
@@ -45,7 +47,7 @@ public class Trail : MonoBehaviour
 
             lastIndex = sections.Count - 1;
 
-            if (sections.Count == 0 || (position - sections[lastIndex].Position).sqrMagnitude > minDistance*minDistance)
+            if (sections.Count == 0 || (position - sections[lastIndex].Position).sqrMagnitude > minDistance * minDistance)
             {
                 TrailSection section = new TrailSection();
 
@@ -62,9 +64,9 @@ public class Trail : MonoBehaviour
         if (sections.Count > 2)
         {
 
-            vertices = new Vector3[sections.Count * 2];
-            colors = new Color[sections.Count * 2];
-            uv = new Vector2[sections.Count * 2];
+            vertices = new Vector3[sections.Count * 2 + 2];
+            colors = new Color[sections.Count * 2 + 2];
+            uv = new Vector2[sections.Count * 2 + 2];
 
             currentSection = sections[0];
 
@@ -124,7 +126,16 @@ public class Trail : MonoBehaviour
                 colors[i * 2 + 1] = interpolatedColor;
             }
 
-            triangles = new int[(sections.Count - 1) * 2 * 3];
+            vertices[vertices.Length - 2] = localSpaceTransform.MultiplyPoint(position + bitangent * (height / 2f));
+            vertices[vertices.Length - 1] = localSpaceTransform.MultiplyPoint(position - bitangent * (height / 2f));
+
+            uv[uv.Length - 2] = new Vector2(0, 0);
+            uv[uv.Length - 1] = new Vector2(0, 1);
+
+            colors[colors.Length - 2] = Color.white;
+            colors[colors.Length - 1] = Color.white;
+
+            triangles = new int[sections.Count * 2 * 3];
 
             for (int i = 0; i < triangles.Length / 6; i++)
             {

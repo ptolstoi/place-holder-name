@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Linq;
-using InControl;
 using UnityEngine;
+using InControl;
 
 public class PlayerController : MonoBehaviour
 {
@@ -32,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     public Vector3 velocity;
     private Trail trail;
+    private TrailMaterialControler trailMaterialControler;
     private LineRenderer lineRenderer;
 
     private Vector3 startVelocity;
@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
         {
             planets = new Planet[planetCount];
             int count = 0;
-            foreach(var p in background.planets)
+            foreach (var p in background.planets)
             {
                 planets[count] = p;
                 count++;
@@ -72,9 +72,9 @@ public class PlayerController : MonoBehaviour
 
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.material.color = Player.GetColor();
-        
-        var trailController = GetComponentInChildren<TrailMaterialControler>();
-        trailController.Color = Player.GetColor();
+
+        trailMaterialControler = GetComponentInChildren<TrailMaterialControler>();
+        trailMaterialControler.Color = Player.GetColor();
         trail = GetComponentInChildren<Trail>();
 
         PlayerSprite.color = Player.GetColor();
@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
         outSideTimer = 0;
 
         RotateAroundCenter();
+
 
         if (GetInputDevice() != null)
         {
@@ -135,12 +136,13 @@ public class PlayerController : MonoBehaviour
         }
 
         return false;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Shader.SetGlobalVector("_MorphParams" + (int)Player, 
+        Shader.SetGlobalVector("_MorphParams" + (int)Player,
             new Vector4(transform.position.x, transform.position.y, 1, 1));
 
         if (Paused)
@@ -155,9 +157,8 @@ public class PlayerController : MonoBehaviour
             }
         }
         if (Paused || deathTimer > 0) return;
-        if (InputIsGrappling() && grappledPlanet == null)
+        if (Input.GetKey(TheOneButton) && grappledPlanet == null)
         {
-            IsActive = true;
             var planet = GetNearestPlanet();
 
             if (planet != null)
@@ -166,17 +167,12 @@ public class PlayerController : MonoBehaviour
                 lastDistance = float.MaxValue;
             }
 
-            if (!background.GameStarted)
-                background.GameStarted = true;
             rotating = false;
         }
-        else if (InputStoppedGrappling() && grappledPlanet != null)
+        else if (Input.GetKeyUp(TheOneButton) && grappledPlanet != null)
         {
-            IsActive = true;
             ReleaseGrapple();
             rotating = false;
-            if (!background.GameStarted)
-                background.GameStarted = true;
         }
 
         if (transform.position.magnitude > background.outerRadius && grappledPlanet == null)
@@ -186,11 +182,6 @@ public class PlayerController : MonoBehaviour
             {
                 Die();
             }
-        }
-
-        if(Input.GetKey(TheOneButton) && !background.GameStarted)
-        {
-            background.GameStarted = true;
         }
     }
 
@@ -202,14 +193,9 @@ public class PlayerController : MonoBehaviour
         foreach (var r in GetComponentsInChildren<Renderer>())
         {
             r.enabled = true;
-        } 
-        
-        SoundSystem.Instance.PlayChord(audio, ChordType.Revive);
-
-        if (GetInputDevice() != null)
-        {
-            GetInputDevice().Vibrate(this, 0.4f, 0.5f);
         }
+
+        SoundSystem.Instance.PlayChord(audio, ChordType.Revive);
     }
 
     public bool GetRotating()
@@ -222,17 +208,17 @@ public class PlayerController : MonoBehaviour
         rotating = true;
         grappledPlanet = planets[0];
         GrappleOnPlanet(true);
-        //IsActive = true;
+        IsActive = true;
     }
 
     Planet GetNearestPlanet()
     {
 
         var possiblePlanets = (from p in planets
-                                     let dist = Vector3.Distance(p.transform.position, transform.position)
-                                     where dist < maximal_grapple_distance
-                                     orderby dist
-                                     select p).ToArray();
+                               let dist = Vector3.Distance(p.transform.position, transform.position)
+                               where dist < maximal_grapple_distance
+                               orderby dist
+                               select p).ToArray();
 
         Planet result = null;
 
@@ -276,7 +262,7 @@ public class PlayerController : MonoBehaviour
         }
 
         return result;
-        
+
     }
 
     float GetAngle(Transform planet)
@@ -305,7 +291,7 @@ public class PlayerController : MonoBehaviour
 
         if (grappledPlanet == null || !isInOrbit)
         {
-            velocity = velocity.normalized*Speed;
+            velocity = velocity.normalized * Speed;
 
             rigidbody2D.MovePosition(transform.position + velocity * Time.fixedDeltaTime);
             lineRenderer.enabled = false;
@@ -319,7 +305,7 @@ public class PlayerController : MonoBehaviour
             if (nextPlanet.dist < nextPlanet.t.localScale.x * 1.4f)
             {
                 velocity += (transform.position - nextPlanet.t.position).normalized * 2 * (nextPlanet.p.Celestial ? -0.5f : 1);
-            } 
+            }
         }
         if (grappledPlanet != null)
         {
@@ -371,13 +357,7 @@ public class PlayerController : MonoBehaviour
         lastDistance = float.MaxValue;
         background.ChangeOwner(grappledPlanet, this, !force);
         grappledPlanet.Grapple(this);
-
-        if (GetInputDevice() != null)
-        {
-            var d = distance*(transform.position.x - grappledPlanet.transform.position.x) < 0 ? -1 : 1;
-            
-            GetInputDevice().Vibrate(this, 0.4f, d, -d);
-        }
+        trailMaterialControler.SetDirection(clockwise ? 1 : -1);
     }
 
     private void ReleaseGrapple()
@@ -395,13 +375,9 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(LayerMask.LayerToName(other.gameObject.layer));
         if (other.gameObject.layer == LayerMask.NameToLayer("Planet"))
         {
-            var planet = other.gameObject.GetComponent<Planet>();
-            if (planet != null && !planet.Celestial)
-            {
-                background.ChangeOwner(planet, this, false);
-            }
             Die();
         }
         else if (other.gameObject.layer == LayerMask.NameToLayer("Border") && grappledPlanet == null)
@@ -434,11 +410,6 @@ public class PlayerController : MonoBehaviour
         var ps = x.GetComponent<Explosion>();
         ps.Player = this;
 
-        if (GetInputDevice() != null)
-        {
-            GetInputDevice().Vibrate(this, 0.4f, 1);
-        }
-
         SoundSystem.Instance.PlayChord(audio, ChordType.Die);
 
         transform.position = startPosition;
@@ -463,19 +434,13 @@ public class PlayerController : MonoBehaviour
     {
         Paused = true;
         trail.Pause();
+        trailMaterialControler.Pause();
     }
 
     public void UnPause()
     {
         Paused = false;
         trail.UnPause();
-    }
-
-    void OnApplicationQuit()
-    {
-        if (GetInputDevice() != null)
-        {
-            GetInputDevice().Vibrate(0);
-        }
+        trailMaterialControler.UnPause();
     }
 }
