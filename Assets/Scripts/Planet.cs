@@ -293,6 +293,7 @@ public class Planet : MonoBehaviour
     public void ClearOwner()
     {
         Owner = Player.PlayerNone;
-        Debug.Log("Clear Planet");
+        var color = ColorPalette.CalcColorCold();
+        ChangeColor(color, 0);
     }
 }

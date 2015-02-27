@@ -100,6 +100,7 @@ public class PlayerController : MonoBehaviour
         {
             planet.ClearOwner();
         }
+        Die();
     }
 
     InputDevice GetInputDevice()
