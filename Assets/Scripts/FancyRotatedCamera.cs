@@ -29,11 +29,11 @@ public class FancyRotatedCamera : MonoBehaviour
             {
                 var poz = p.p + p.v.magnitude*p.t.up;
                 validPositions.Add(poz);
-                count++;
             }
+            count++;
         }
 
-	    if (count == 0)
+	    if (validPositions.Count == 0)
 	    {
 	        return;
 	    }
