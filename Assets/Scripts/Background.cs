@@ -32,6 +32,8 @@ public class Background : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
+        Screen.showCursor = false;
+        
         GameStarted = false;
         Restart = false;
         players = GameObject.FindGameObjectsWithTag("Player").Select(p => p.GetComponent<PlayerController>()).ToArray();
