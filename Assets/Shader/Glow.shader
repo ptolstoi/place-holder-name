@@ -6,13 +6,15 @@
 	}
 	SubShader {
 		Pass {
-			Tags { "RenderType"="Transparent" }
+			Tags { "RenderType"="Transparent" "Queue"="Transparent + 10"  }
 			Blend One One
 			Cull Back
 			LOD 200
             Lighting Off
 			ZWrite Off
+            ZTest Less
 			ColorMask RGB
+            Offset 100, -1
 		
 			CGPROGRAM
 			#pragma vertex vert alpha

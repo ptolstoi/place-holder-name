@@ -18,20 +18,26 @@ public class SoundSystem : MonoBehaviour
     public float BPM = 85;
     public AudioSource BackgroundMusic;
     public AudioClip Chord;
-    private List<int> Notes = new List<int>();
-    private int lastChord;
+
+    private int lastNote;
+    private int prelastNote;
 
     private Dictionary<AudioSource, IEnumerator> PlayTime;
 
     void Start()
     {
-        lastChord = -1;
         Instance = this;
         PlayTime = new Dictionary<AudioSource, IEnumerator>();
+        lastNote = -1;
+        prelastNote = -1;
     }
 
     public void PlayChord(AudioSource source, ChordType type)
     {
+        if(!gameObject.GetComponentInParent<Background>().audio.isPlaying){
+            return;
+        }
+
         source.Stop();
         source.clip = Chord;
         var currentBeat = BackgroundMusic.time.Sec2Beat(BPM);
@@ -39,15 +45,16 @@ public class SoundSystem : MonoBehaviour
         var time = chord * (Utils.Beat2Sec(4.0f * 4, BPM)) + (int)type * (Utils.Beat2Sec(4 * 4 * 4, BPM));
         if (type == ChordType.GrabOld || type == ChordType.GrabNew)
         {
-            if (lastChord != chord || Notes.Count == 0)
+            var note = -1;
+            do
             {
-                Notes.Clear();
-                Notes.AddRange(new[]{0,1,2,3});
-                Notes = Notes.Randomize().ToList();
-            }
+                note = Random.Range(0, 4);
+            } while (note == lastNote || note == prelastNote);
+            
+            prelastNote = lastNote;
+            lastNote = note;
 
-            time += Notes[0] * Utils.Beat2Sec(4.0f, BPM);
-            Notes.RemoveAt(0);
+            time += note * Utils.Beat2Sec(4.0f, BPM);
         }
         source.time = time;
         source.Play();

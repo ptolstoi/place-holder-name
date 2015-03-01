@@ -6,6 +6,7 @@ public class Explosion : MonoBehaviour
 
     public PlayerController Player;
     private bool UnDie;
+    private float playerDistance;
 
     // Use this for initialization
     void Start()
@@ -17,7 +18,6 @@ public class Explosion : MonoBehaviour
         for (int i = 0; i < ps.Length; i++)
         {
             ps[i].velocity = new Vector3(ps[i].velocity.x, ps[i].velocity.y);
-            ps[i].velocity = Vector3.Lerp(ps[i].velocity, Vector3.zero, Time.deltaTime * 2);
             ps[i].position = new Vector3(ps[i].position.x, ps[i].position.y, 0.5f);
         }
         particleSystem.SetParticles(ps, ps.Length);
@@ -35,8 +35,10 @@ public class Explosion : MonoBehaviour
 
         for (int i = 0; i < ps.Length; i++)
         {
-            ps[i].velocity = -ps[i].position;
+            ps[i].velocity = Player.transform.position - ps[i].position;
         }
+
+        playerDistance = Player.transform.position.magnitude * 1.1f;
 
         particleSystem.SetParticles(ps, ps.Length);
     }
@@ -62,7 +64,7 @@ public class Explosion : MonoBehaviour
         {
             for (int i = 0; i < ps.Length; i++)
             {
-                if (ps[i].position.magnitude < 7 && ps[i].lifetime > 0.5f)
+                if (ps[i].position.magnitude < playerDistance && ps[i].lifetime > 0.5f)
                 {
                     ps[i].lifetime = 0;
                     ps[i].velocity = Vector3.zero;
@@ -76,7 +78,7 @@ public class Explosion : MonoBehaviour
         }
         particleSystem.SetParticles(ps, ps.Length);
 
-        if (ps.Length == 0 && UnDie)
+        if (ps.Length < 20 && UnDie)
         {
             Die();
         }
@@ -85,7 +87,7 @@ public class Explosion : MonoBehaviour
     private void Die()
     {
         Player.OnUnDie -= PlayerOnOnUnDie;
-        Destroy(this);
+        Destroy(gameObject);
         Player.UnDie();
     }
 }

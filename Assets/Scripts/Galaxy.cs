@@ -9,6 +9,12 @@ public class Galaxy : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    GetComponent<MeshRenderer>().material.mainTextureOffset += velocity*Time.deltaTime;
+        var offset = GetComponent<MeshRenderer>().material.mainTextureOffset;
+        offset += velocity*Time.deltaTime;
+
+        offset.x %= 1;
+        offset.y %= 1;
+
+	    GetComponent<MeshRenderer>().material.mainTextureOffset = offset;
 	}
 }

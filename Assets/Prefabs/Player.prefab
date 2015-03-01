@@ -252,8 +252,7 @@ MonoBehaviour:
   Player: 0
   PlayerSprite: {fileID: 21280630}
   DeathCoolDown: 5
-  OutSideDeathTimer: .100000001
-  velocity: {x: 0, y: 25, z: 0}
+  OutSideDeathTimer: .300000012
   Speed: 20
 --- !u!120 &12000460
 LineRenderer:
@@ -279,8 +278,8 @@ LineRenderer:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
   m_Parameters:
-    startWidth: .300000012
-    endWidth: .300000012
+    startWidth: .200000003
+    endWidth: .200000003
     m_StartColor:
       serializedVersion: 2
       rgba: 4294967295

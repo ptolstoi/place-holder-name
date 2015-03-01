@@ -39,9 +39,11 @@ public class PointGUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (!Background.GameStarted)
         {
             timeLeft.enabled = false;
+
             return;
         }
 
@@ -61,6 +63,7 @@ public class PointGUI : MonoBehaviour
         {
             var player = (Player)i;
             var rect = Players[i];
+
             float owned = Background.ownership[player] / (float)Background.createdPlanets;
             var targetWidth = (rectTransform.GetWidth() - 3 * border) * owned;
             rect.SetWidth(Mathf.Lerp(rect.GetWidth(), targetWidth, Time.deltaTime * 4));
@@ -78,7 +81,7 @@ public class PointGUI : MonoBehaviour
             totalWidth -= rect.GetWidth() + border;
         }
 
-        if (Background.GameStarted)
+        if (Background.GameStarted || Background.Restart)
         {
             start.enabled = false;
             var time = Mathf.FloorToInt(Background.TimeLeft);
@@ -88,10 +91,12 @@ public class PointGUI : MonoBehaviour
                 restart.enabled = true;
                 time = Mathf.FloorToInt(Background.CurrPauseTime);
             }
-            else
+            else if(time >= 0)
             {
                 timeLeft.enabled = true;
                 restart.enabled = false;
+            } else {
+                
             }
 
             var mins = Mathf.FloorToInt(time / 60.0f);

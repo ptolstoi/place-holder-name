@@ -7,7 +7,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Galaxy
-  m_Shader: {fileID: 4800000, guid: c2ab125136f767544963449915d3e390, type: 3}
+  m_Shader: {fileID: 4800000, guid: ae415c1d8185241d7a8cbb8d46642c05, type: 3}
   m_ShaderKeywords: []
   m_CustomRenderQueue: -1
   m_SavedProperties:

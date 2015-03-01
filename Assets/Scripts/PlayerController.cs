@@ -20,21 +20,21 @@ public class PlayerController : MonoBehaviour
 
     private Planet[] planets;
 
-    private Planet grappledPlanet;
+    public Planet grappledPlanet { get; protected set;}
     private Planet previous;
 
-    private float distance;
+    public float distance { get; protected set;}
     private bool clockwise;
     float lastDistance;
 
-    private bool isInOrbit;
+    public bool isInOrbit { get; protected set;}
 
-    public Vector3 velocity;
+//    public Vector3 velocity;
     private Trail trail;
     private TrailMaterialControler trailMaterialControler;
     private LineRenderer lineRenderer;
 
-    private Vector3 startVelocity;
+//    private Vector3 startVelocity;
     private Vector3 startPosition;
     private Quaternion startRotation;
 
@@ -47,6 +47,11 @@ public class PlayerController : MonoBehaviour
     public event System.Action OnUnDie;
 
     public bool IsActive { get; protected set; }
+    public bool IsDead { get { return deathTimer < 0; } }
+
+    void Awake() {
+        trailMaterialControler = GetComponentInChildren<TrailMaterialControler>();
+    }
 
     // Use this for initialization
     void Start()
@@ -75,13 +80,11 @@ public class PlayerController : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.material.color = Player.GetColor();
 
-        trailMaterialControler = GetComponentInChildren<TrailMaterialControler>();
         trailMaterialControler.Color = Player.GetColor();
         trail = GetComponentInChildren<Trail>();
 
         PlayerSprite.color = Player.GetColor();
 
-        startVelocity = velocity;
         startPosition = transform.position;
         startRotation = transform.rotation;
         Paused = false;
@@ -102,6 +105,7 @@ public class PlayerController : MonoBehaviour
         {
             planet.ClearOwner();
         }
+        IsActive = false;
 //        Die();
     }
 
@@ -148,10 +152,8 @@ public class PlayerController : MonoBehaviour
         Shader.SetGlobalVector("_MorphParams" + (int)Player,
             new Vector4(transform.position.x, transform.position.y, 1, 1));
 
-        if (Paused)
-        {
-            deathTimer = Mathf.Max(-1, deathTimer - Time.deltaTime);
-        }
+        deathTimer = Mathf.Max(-1, deathTimer - Time.deltaTime);
+
         if (deathTimer < 0 && deathTimer + Time.deltaTime > 0)
         {
             if (OnUnDie != null)
@@ -240,7 +242,7 @@ public class PlayerController : MonoBehaviour
 
         Planet result = null;
 
-        var position = transform.position + velocity * 0.125f;
+        var position = transform.position + transform.up * Speed * 0.125f;
         var minimalDistance = float.MaxValue;
         var flag = false;
 
@@ -270,7 +272,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (Vector3.Distance(position + velocity.normalized * distanceToPlanet, planet.transform.position) > 1 + planetSize)
+            if (Vector3.Distance(position + transform.up * distanceToPlanet, planet.transform.position) > 1 + planetSize)
             {
                 flag = previous == planet;
                 result = planet;
@@ -309,9 +311,8 @@ public class PlayerController : MonoBehaviour
 
         if (grappledPlanet == null || !isInOrbit)
         {
-            velocity = velocity.normalized * Speed;
 
-            rigidbody2D.MovePosition(transform.position + velocity * Time.fixedDeltaTime);
+            rigidbody2D.MovePosition(transform.position + transform.up * Speed * Time.fixedDeltaTime);
             lineRenderer.enabled = false;
 
             var nextPlanet = planets.Select(p => new
@@ -322,7 +323,10 @@ public class PlayerController : MonoBehaviour
             }).OrderBy(p => p.dist).First();
             if (nextPlanet.dist < nextPlanet.t.localScale.x * 1.4f)
             {
-                velocity += (transform.position - nextPlanet.t.position).normalized * 2 * (nextPlanet.p.Celestial ? -0.5f : 1);
+				var gravity = transform.up * Speed +
+					(transform.position - nextPlanet.t.position).normalized * 1.5f * (nextPlanet.p.Celestial ? -0.5f : 1.2f);
+					transform.up = gravity.normalized;
+//                velocity += (transform.position - nextPlanet.t.position).normalized * 2 * (nextPlanet.p.Celestial ? -0.5f : 1);
             }
         }
         if (grappledPlanet != null)
@@ -334,7 +338,7 @@ public class PlayerController : MonoBehaviour
                 var connection = (transform.position - grappledPlanet.transform.position).normalized;
                 var angle = Mathf.Atan2(connection.y, connection.x) / Mathf.PI * 180;
 
-                rigidbody2D.MovePosition(grappledPlanet.transform.position + connection * distance + velocity.magnitude * transform.up * Time.fixedDeltaTime);
+                rigidbody2D.MovePosition(grappledPlanet.transform.position + connection * distance + Speed * transform.up * Time.fixedDeltaTime);
                 rigidbody2D.MoveRotation(angle + (clockwise ? 180 : 0));
             }
             else
@@ -390,13 +394,17 @@ public class PlayerController : MonoBehaviour
 
     private void ReleaseGrapple()
     {
+        if(grappledPlanet == null) {
+            return;
+        }
+
         var planet = grappledPlanet.GetComponent<Planet>();
         if (planet != null)
         {
             planet.ReleaseGrapple(this);
         }
 
-        velocity = Speed * transform.up;
+        //velocity = Speed * transform.up;
         previous = grappledPlanet;
         grappledPlanet = null;
         isInOrbit = false;
@@ -404,7 +412,6 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(LayerMask.LayerToName(other.gameObject.layer));
         if (other.gameObject.layer == LayerMask.NameToLayer("Planet"))
         {
             var planet = other.gameObject.GetComponent<Planet>();
@@ -414,10 +421,10 @@ public class PlayerController : MonoBehaviour
             }
             Die();
         }
-        else if (other.gameObject.tag == "Player" && IsActive && !rotating)
+        else if (other.gameObject.tag == "Player")
         {
             var pc = other.GetComponent<PlayerController>();
-            if (pc.IsActive && !pc.rotating && deathTimer < 0)
+            if (pc.IsActive && !pc.rotating && pc.deathTimer < 0 && IsActive && !rotating)
             {
                 Die();
                 pc.Die();
@@ -441,9 +448,9 @@ public class PlayerController : MonoBehaviour
 
         transform.position = startPosition;
         transform.rotation = startRotation;
-        velocity = startVelocity;
 
         isInOrbit = false;
+        ReleaseGrapple();
         grappledPlanet = null;
 
         trail.Reset();

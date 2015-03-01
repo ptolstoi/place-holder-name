@@ -102,7 +102,7 @@ public class Planet : MonoBehaviour
         glowMaterial.mainTextureOffset += Vector2.right*Random.Range(0f, 1f);
         Glow.transform.SetParent(null);
         Glow.transform.eulerAngles = new Vector3(180, 0, 0);
-        Glow.transform.position += Vector3.up*0.5f;
+		Glow.transform.position += Vector3.forward * 0.5f;
     }
 
     void GenerateDecorations()
@@ -135,7 +135,7 @@ public class Planet : MonoBehaviour
         if (rng == 0 || rng == 1 || rng == 2)
         {
             var ring = GenerateDecoration(Decorations[rng]);
-            //            ring.Rotate(Vector3.right, 20f);
+            ring.localEulerAngles = Vector3.right * -20;
 
             if (rng == 2)
             {
@@ -145,12 +145,11 @@ public class Planet : MonoBehaviour
         else if (rng == 3)
         {
             var ring1 = GenerateDecoration(Decorations[1], true);
-            var ring2 = GenerateDecoration(Decorations[1]);
-            var angle = Random.Range(0, 30) + 10 * (Random.value < 0.5f ? -1 : 1);
+            var ring2 = GenerateDecoration(Decorations[1]);;
 
             ring2.localEulerAngles = ring1.localEulerAngles;
-            ring1.localEulerAngles += new Vector3(0, angle);
-            ring2.localEulerAngles += new Vector3(0, -angle);
+            ring1.localEulerAngles += new Vector3(0, 20);
+            ring2.localEulerAngles += new Vector3(0, -20);
         }
         else if (rng == 4)
         {
@@ -194,6 +193,8 @@ public class Planet : MonoBehaviour
         if (!hasMoons)
         {
             DecorationRoot.transform.Rotate(Vector3.back, rotationSpeed * Time.deltaTime);
+            ringMaterial.mainTextureOffset += -Vector2.up * Time.deltaTime * 0.2f;
+            ringMaterial.mainTextureOffset = new Vector2(ringMaterial.mainTextureOffset.x % 1, ringMaterial.mainTextureOffset.y % 1);
         }
         else
         {
@@ -205,7 +206,7 @@ public class Planet : MonoBehaviour
             }
         }
 
-        Glow.transform.position = transform.position + Vector3.up * transform.localScale.x * 0.5f + Vector3.forward * 0.5f;
+        // Glow.transform.position = transform.position + Vector3.up * transform.localScale.x * 0.5f + Vector3.forward * 0.5f;
 
         if (GrappledPlayer != null)
         {
@@ -230,9 +231,6 @@ public class Planet : MonoBehaviour
                 WobbleAnimation.Evaluate(wobbleTime / MaxWobbleTime));
             wobbleTime += Time.deltaTime;
         }
-
-        Vector2 bias = (InnerPlanet.transform.position - transform.position);
-        Glow.transform.position += (Vector3)bias;
     }
 
     void ChangeColor(Color newColor, float duration)

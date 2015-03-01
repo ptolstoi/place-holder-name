@@ -15,11 +15,15 @@ public class FancyRotatedCamera : MonoBehaviour
     void Start()
     {
         player = GameObject.FindGameObjectsWithTag("Player").Select(p => p.GetComponent<PlayerController>()).ToArray();
+        lastPosition = new Vector3(0, 0, -42);
     }
 
 	void Update ()
 	{
-	    var pos = player.Select(pc => new { p = pc.transform.position, v = pc.velocity.normalized, t = pc.transform });
+	    var pos = player.Select(pc => new { pc.transform.position, 
+                                pc.transform.up, 
+                                pc.transform, pc,
+                                grappledPlanet = pc.grappledPlanet });
         
         int count = 0;
 
@@ -28,7 +32,16 @@ public class FancyRotatedCamera : MonoBehaviour
         {
             if (player[count].IsActive)
             {
-                var poz = p.p + p.v.magnitude*p.t.up;
+                var poz = p.position;
+                if(p.pc.isInOrbit && p.grappledPlanet != null) {
+                    validPositions.Add(p.grappledPlanet.transform.position -
+                        p.pc.distance * p.grappledPlanet.transform.position.normalized);
+
+                    poz = p.grappledPlanet.transform.position +
+                        p.pc.distance * p.grappledPlanet.transform.position.normalized;
+                } else if(!p.pc.IsDead) {
+                    poz = Vector3.zero;
+                }
                 validPositions.Add(poz);
             }
             count++;
@@ -70,7 +83,6 @@ public class FancyRotatedCamera : MonoBehaviour
 	    transform.position = lastPosition;
 
         transform.rotation = Quaternion.identity;
-	    var angle = Angle.Evaluate(distance);
         transform.RotateAround(center, Vector3.right, -20);
 	}
 }

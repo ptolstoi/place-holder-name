@@ -80,13 +80,6 @@ public class Background : MonoBehaviour {
             createdPlanets++;
         }
 
-	    float borderWidth = 50;
-
-//        float radiusDouble = radius * 2.0f;
-//        CreateBorder("LeftBorder", new Rect(-borderWidth, -borderWidth, borderWidth, radiusDouble + borderWidth * 2));
-//        CreateBorder("RightBorder", new Rect(radiusDouble, -borderWidth, borderWidth, radiusDouble + borderWidth * 2));
-//        CreateBorder("BottomBorder", new Rect(-borderWidth, -borderWidth, radiusDouble + borderWidth * 2, borderWidth));
-//        CreateBorder("TopBorder", new Rect(-borderWidth, radiusDouble, radiusDouble + borderWidth * 2, borderWidth));
 	}
 
     void Update()
@@ -94,6 +87,13 @@ public class Background : MonoBehaviour {
         if (Input.GetKey(KeyCode.Escape))
         {
             Application.LoadLevel(0);
+        }
+        if (Input.GetKeyUp(KeyCode.M)) {
+            if(audio.isPlaying) {
+                audio.Pause();
+            } else {
+                audio.Play();
+            }
         }
 
         if (TimeLeft > 0)
@@ -126,6 +126,7 @@ public class Background : MonoBehaviour {
                     player.UnPause();
                 }
                 Restart = true;
+                GameStarted = false;
                 foreach(var planet in planets)
                 {
                     planet.ClearOwner();
