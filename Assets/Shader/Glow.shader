@@ -50,7 +50,7 @@
 
 			float3 frag(v2f i) : COLOR {
 				float4 tex = tex2D(_MainTex, i.texcoord);
-				return float3(tex.a, tex.a, tex.a) * i.color.r * 2.1 * _Color.rgb * _Alpha;
+				return float4(float3(tex.a, tex.a, tex.a) * i.color.r * 2.1 * _Color.rgb * _Alpha, 1);
 			}
 
 			ENDCG
