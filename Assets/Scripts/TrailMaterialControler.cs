@@ -20,7 +20,7 @@ public class TrailMaterialControler : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        material = renderer.material;
+        material = GetComponent<Renderer>().material;
         material.SetTexture("_MainTex", ColorTexture);
     }
 
@@ -29,14 +29,14 @@ public class TrailMaterialControler : MonoBehaviour
     {
         if (!pause)
         {
-            Vector2 textureOffset = renderer.material.GetTextureOffset("_MainTex");
+            Vector2 textureOffset = GetComponent<Renderer>().material.GetTextureOffset("_MainTex");
             textureOffset.x = (textureOffset.x + Time.deltaTime * ColorVelocity.x) % 1;
             textureOffset.y = (textureOffset.y + Time.deltaTime * ColorVelocity.y * directionFactor) % 1;
             material.SetTextureOffset("_MainTex", textureOffset);
 
             material.SetColor("_Color", Color);
 
-            renderer.material = material;
+            GetComponent<Renderer>().material = material;
         }
     }
 

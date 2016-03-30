@@ -34,10 +34,10 @@ public class SoundSystem : MonoBehaviour
 
     public void PlayChord(AudioSource source, ChordType type)
     {
-        if(!gameObject.GetComponentInParent<Background>().audio.isPlaying){
+        if(!gameObject.GetComponentInParent<Background>().GetComponent<AudioSource>().isPlaying){
             return;
         }
-
+        
         source.Stop();
         source.clip = Chord;
         var currentBeat = BackgroundMusic.time.Sec2Beat(BPM);
@@ -58,6 +58,7 @@ public class SoundSystem : MonoBehaviour
         }
         source.time = time;
         source.Play();
+        Debug.Log(source);
 
         if (PlayTime.ContainsKey(source))
         {

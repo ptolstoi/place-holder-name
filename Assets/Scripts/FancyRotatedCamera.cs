@@ -72,7 +72,7 @@ public class FancyRotatedCamera : MonoBehaviour
 	        center = (max - min)*0.5f + min;
 
 	    Vector2 size = max - min;
-	    size.y *= camera.aspect;
+	    size.y *= GetComponent<Camera>().aspect;
 
 	    var maxSide = Mathf.Max(minZoom, Mathf.Max(size.x, size.y));
 

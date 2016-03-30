@@ -16,3 +16,7 @@
 sysinfo.txt
 bin
 obj
+
+.vscode/
+Assets/VSCode/*
+Assets/VSCode.meta

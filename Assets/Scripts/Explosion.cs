@@ -11,16 +11,16 @@ public class Explosion : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        particleSystem.startColor = Player.Player.GetColor();
-        particleSystem.Emit(particleSystem.maxParticles);
-        var ps = new ParticleSystem.Particle[particleSystem.particleCount];
-        particleSystem.GetParticles(ps);
+        GetComponent<ParticleSystem>().startColor = Player.Player.GetColor();
+        GetComponent<ParticleSystem>().Emit(GetComponent<ParticleSystem>().maxParticles);
+        var ps = new ParticleSystem.Particle[GetComponent<ParticleSystem>().particleCount];
+        GetComponent<ParticleSystem>().GetParticles(ps);
         for (int i = 0; i < ps.Length; i++)
         {
             ps[i].velocity = new Vector3(ps[i].velocity.x, ps[i].velocity.y);
             ps[i].position = new Vector3(ps[i].position.x, ps[i].position.y, 0.5f);
         }
-        particleSystem.SetParticles(ps, ps.Length);
+        GetComponent<ParticleSystem>().SetParticles(ps, ps.Length);
 
         Player.OnUnDie += PlayerOnOnUnDie;
         UnDie = false;
@@ -30,8 +30,8 @@ public class Explosion : MonoBehaviour
     private void PlayerOnOnUnDie()
     {
         UnDie = true;
-        var ps = new ParticleSystem.Particle[particleSystem.particleCount];
-        particleSystem.GetParticles(ps);
+        var ps = new ParticleSystem.Particle[GetComponent<ParticleSystem>().particleCount];
+        GetComponent<ParticleSystem>().GetParticles(ps);
 
         for (int i = 0; i < ps.Length; i++)
         {
@@ -40,14 +40,14 @@ public class Explosion : MonoBehaviour
 
         playerDistance = Player.transform.position.magnitude * 1.1f;
 
-        particleSystem.SetParticles(ps, ps.Length);
+        GetComponent<ParticleSystem>().SetParticles(ps, ps.Length);
     }
 
     // Update is called once per frame
     void Update()
     {
-        var ps = new ParticleSystem.Particle[particleSystem.particleCount];
-        particleSystem.GetParticles(ps);
+        var ps = new ParticleSystem.Particle[GetComponent<ParticleSystem>().particleCount];
+        GetComponent<ParticleSystem>().GetParticles(ps);
 
         if (!UnDie)
         {
@@ -76,7 +76,7 @@ public class Explosion : MonoBehaviour
                 }
             }
         }
-        particleSystem.SetParticles(ps, ps.Length);
+        GetComponent<ParticleSystem>().SetParticles(ps, ps.Length);
 
         if (ps.Length < 20 && UnDie)
         {

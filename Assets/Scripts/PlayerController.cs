@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour
             r.enabled = true;
         }
 
-        SoundSystem.Instance.PlayChord(audio, ChordType.Revive); 
+        SoundSystem.Instance.PlayChord(GetComponent<AudioSource>(), ChordType.Revive); 
         
         if (GetInputDevice() != null)
         {
@@ -312,7 +312,7 @@ public class PlayerController : MonoBehaviour
         if (grappledPlanet == null || !isInOrbit)
         {
 
-            rigidbody2D.MovePosition(transform.position + transform.up * Speed * Time.fixedDeltaTime);
+            GetComponent<Rigidbody2D>().MovePosition(transform.position + transform.up * Speed * Time.fixedDeltaTime);
             lineRenderer.enabled = false;
 
             var nextPlanet = planets.Select(p => new
@@ -338,8 +338,8 @@ public class PlayerController : MonoBehaviour
                 var connection = (transform.position - grappledPlanet.transform.position).normalized;
                 var angle = Mathf.Atan2(connection.y, connection.x) / Mathf.PI * 180;
 
-                rigidbody2D.MovePosition(grappledPlanet.transform.position + connection * distance + Speed * transform.up * Time.fixedDeltaTime);
-                rigidbody2D.MoveRotation(angle + (clockwise ? 180 : 0));
+                GetComponent<Rigidbody2D>().MovePosition(grappledPlanet.transform.position + connection * distance + Speed * transform.up * Time.fixedDeltaTime);
+                GetComponent<Rigidbody2D>().MoveRotation(angle + (clockwise ? 180 : 0));
             }
             else
             {
@@ -439,7 +439,7 @@ public class PlayerController : MonoBehaviour
         var ps = x.GetComponent<Explosion>();
         ps.Player = this;
 
-        SoundSystem.Instance.PlayChord(audio, ChordType.Die);
+        SoundSystem.Instance.PlayChord(GetComponent<AudioSource>(), ChordType.Die);
 
         if (GetInputDevice() != null)
         {

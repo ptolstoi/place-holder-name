@@ -32,7 +32,7 @@ public class Background : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
     {
-        Screen.showCursor = false;
+        Cursor.visible = false;
         
         GameStarted = false;
         Restart = false;
@@ -91,10 +91,10 @@ public class Background : MonoBehaviour {
             Application.LoadLevel(0);
         }
         if (Input.GetKeyUp(KeyCode.M)) {
-            if(audio.isPlaying) {
-                audio.Pause();
+            if(GetComponent<AudioSource>().isPlaying) {
+                GetComponent<AudioSource>().Pause();
             } else {
-                audio.Play();
+                GetComponent<AudioSource>().Play();
             }
         }
 
@@ -186,7 +186,7 @@ public class Background : MonoBehaviour {
         {
             if (playSound)
             {
-                SoundSystem.Instance.PlayChord(newOwner.audio, ChordType.GrabOld);
+                SoundSystem.Instance.PlayChord(newOwner.GetComponent<AudioSource>(), ChordType.GrabOld);
             }
             return;
         }

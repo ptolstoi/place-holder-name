@@ -48,11 +48,11 @@ public class Planet : MonoBehaviour
 
             glowMaterial.mainTextureOffset += new Vector2(0.5f,0);
 
-            SoundSystem.Instance.PlayChord(newOwner.audio, ChordType.GrabNew);
+            SoundSystem.Instance.PlayChord(newOwner.GetComponent<AudioSource>(), ChordType.GrabNew);
         }
         else
         {
-            SoundSystem.Instance.PlayChord(newOwner.audio, ChordType.GrabOld);
+            SoundSystem.Instance.PlayChord(newOwner.GetComponent<AudioSource>(), ChordType.GrabOld);
         }
     }
 
@@ -285,7 +285,7 @@ public class Planet : MonoBehaviour
 
     public void SetCentralPlanet()
     {
-        GetComponent<CircleCollider2D>().center = Vector2.zero;
+        GetComponent<CircleCollider2D>().offset = Vector2.zero;
     }
 
     public void ClearOwner()
