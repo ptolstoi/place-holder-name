@@ -3,6 +3,13 @@ using System.Linq;
 using UnityEngine;
 using InControl;
 
+public enum PlayerCorner {
+    LeftTop,
+    LeftBottom,
+    RightTop,
+    RightBottom
+}
+
 public class PlayerController : MonoBehaviour
 {
     const float maximal_grapple_distance = 20;
@@ -11,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     public Background background;
     public KeyCode TheOneButton = KeyCode.Space;
+    public PlayerCorner corner = PlayerCorner.LeftTop;
     public Player Player = Player.Player1;
     private bool rotating = true;
 
@@ -117,6 +125,31 @@ public class PlayerController : MonoBehaviour
 
     bool InputIsGrappling()
     {
+        foreach(var touch in Input.touches) {
+          
+            if(touch.phase != TouchPhase.Ended && touch.phase != TouchPhase.Canceled) {
+                var left = touch.position.x < Screen.width * 0.5;
+                var right = touch.position.x > Screen.width * 0.5;
+                var top = touch.position.y < Screen.height * 0.5;
+                var bottom = touch.position.y > Screen.height * 0.5;
+                
+                if (left && (corner == PlayerCorner.LeftBottom || corner == PlayerCorner.LeftTop)) {
+                    if (top && corner == PlayerCorner.LeftTop) {
+                        return true;
+                    } else if (bottom && corner == PlayerCorner.LeftBottom) {
+                        return true;
+                    }
+                } else if (right && (corner == PlayerCorner.RightBottom || corner == PlayerCorner.RightTop)) {
+                    if (top && corner == PlayerCorner.RightTop) {
+                        return true;
+                    } else if (bottom && corner == PlayerCorner.RightBottom) {
+                        return true;
+                    }
+                }
+            }
+          
+        }
+        
         if (Input.GetKey(TheOneButton))
         {
             return true;
@@ -132,6 +165,31 @@ public class PlayerController : MonoBehaviour
 
     bool InputStoppedGrappling()
     {
+        foreach(var touch in Input.touches) {
+          
+            if(touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled) {  
+                var left = touch.position.x < Screen.width * 0.5;
+                var right = touch.position.x > Screen.width * 0.5;
+                var top = touch.position.y < Screen.height * 0.5;
+                var bottom = touch.position.y > Screen.height * 0.5;
+                
+                if (left && (corner == PlayerCorner.LeftBottom || corner == PlayerCorner.LeftTop)) {
+                    if (top && corner == PlayerCorner.LeftTop) {
+                        return true;
+                    } else if (bottom && corner == PlayerCorner.LeftBottom) {
+                        return true;
+                    }
+                } else if (right && (corner == PlayerCorner.RightBottom || corner == PlayerCorner.RightTop)) {
+                    if (top && corner == PlayerCorner.RightTop) {
+                        return true;
+                    } else if (bottom && corner == PlayerCorner.RightBottom) {
+                        return true;
+                    }
+                }
+            }
+          
+        }
+        
         if (Input.GetKeyUp(TheOneButton))
         {
             return true;
